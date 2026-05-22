@@ -58,28 +58,23 @@ void MainWindow::spectrogramPageWidget() {
 
 void MainWindow::on_btn_theme_clicked()
 {
-    int x = (this->width() - ui->theme_frame->width()) / 2;
-    int y = (this->height() - ui->theme_frame->height()) / 2;
-    ui->theme_frame->move(x, y);
-
-    ui->theme_frame->raise();
-    ui->theme_frame->show();
+  updateThemeFrameSize();
+  ui->theme_frame->raise();
+  ui->theme_frame->show();
 }
 
 void MainWindow::on_btn_cancel_clicked()
 {
-    ui->theme_frame->hide();
+  ui->theme_frame->hide();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
-    QMainWindow::resizeEvent(event);
+  QMainWindow::resizeEvent(event);
 
-    if(ui->theme_frame && !ui->theme_frame->isHidden()) {
-        int x = (this->width() - ui->theme_frame->width()) / 2;
-        int y = (this->height() - ui->theme_frame->height()) / 2;
-        ui->theme_frame->move(x, y);
-        ui->theme_frame->raise();
-    }
+  if(ui->theme_frame && !ui->theme_frame->isHidden()) {
+    updateThemeFrameSize();
+    ui->theme_frame->raise();
+  }
 }
 
 void MainWindow::onVolumeSliderChanged(int value) {
@@ -97,4 +92,20 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   QSettings settings("KoNaR", "AcoustiQt");
   settings.setValue("volumeSliderPos", ui->verticalSlider->value());
   QMainWindow::closeEvent(event);
+}
+
+void MainWindow::updateThemeFrameSize() {
+  if (ui->theme_frame) {
+    int new_width = this->width() * 0.6;
+    int new_height = this->height() * 0.6;
+
+    new_width = qMax(new_width, 300);
+    new_height = qMax(new_height, 200);
+
+    ui->theme_frame->resize(new_width, new_height);
+    int x = (this->width() - ui->theme_frame->width()) / 2;
+    int y = (this->height() - ui->theme_frame->height()) / 2;
+
+    ui->theme_frame->move(x, y);
+  }
 }

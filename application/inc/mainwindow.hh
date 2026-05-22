@@ -50,6 +50,7 @@ class MainWindow : public QMainWindow {
   * @brief Realizuje połączenia pomiędzy sygnałami i slotami.
   */
   void initConnections();
+  void updateThemeFrameSize();
   Q_OBJECT
 
 private slots:

@@ -9,7 +9,6 @@
 class WiFi_UDP {
   volatile bool connected = false;
   uint8_t packet_count = 0;
-  IPAddress UDP_ADDR = IPAddress(192, 168, 2, 59);
   NetworkUDP udp;
   static constexpr uint8_t LED = 38;
   void connect_to_wifi(const char * ssid, const char *pwd);
