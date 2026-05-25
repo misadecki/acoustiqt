@@ -22,20 +22,31 @@
  * @brief Przestrzeń nazw zawierająca parametry techniczne protokołu.
  */
 namespace Protocol {
-  /// Numer portu UDP wykorzystywanego do transmisji danych.
+  /**
+   * @brief Numer portu UDP wykorzystywanego do transmisji danych.
+   */
   static constexpr uint16_t PORT = 42069;
 
-  /// Bajty startowe identyfikujące początek ramki: 0xDEAD.
+  /**
+   * @brief Bajty startowe identyfikujące początek ramki: 0xDEAD.
+   */
   static constexpr uint16_t START_BYTES = 0xDEAD;
 
-  /// Liczba próbek audio typu int32_t przesyłanych w pojedynczej ramce.
+  /**
+   * @brief Liczba próbek audio typu int32_t przesyłanych w pojedynczej ramce.
+   */
   static constexpr uint16_t SAMPLES_PER_PACKET = 256;
 
-  /// Wielomian używany do obliczeń sumy kontrolnej CRC8.
+  /**
+   * @brief Wielomian używany do obliczeń sumy kontrolnej CRC8.
+   */
   static constexpr uint8_t POLYNOMIAL = 0x07;
 
-  /// Wartość początkowa rejestru CRC.
+  /**
+   * @brief Wartość początkowa rejestru CRC.
+   */
   static constexpr uint8_t INIT_VAL = 0x00;
+
   /**
     * @brief Oblicza 8-bitową sumę kontrolną (CRC8) dla podanego bufora.
     * 
@@ -58,16 +69,24 @@ namespace Protocol {
  * między różnymi architekturami systemowymi.
  */
 struct AudioFrame {
-  /// Znacznik początku ramki. Powinien wynosić @ref Protocol::START_BYTES.
+  /**
+   * @brief Znacznik początku ramki. Powinien wynosić @ref Protocol::START_BYTES.
+   */
   uint16_t start;
 
-  /// Numer sekwencyjny pakietu (ułatwia wykrywanie strat).
+  /**
+   * @brief Numer sekwencyjny pakietu (ułatwia wykrywanie strat).
+   */
   uint8_t count;
 
-  /// Tablica próbek audio w formacie 32-bitowym.
+  /**
+   * @brief Tablica próbek audio w formacie 32-bitowym.
+   */
   int32_t samples[Protocol::SAMPLES_PER_PACKET];
 
-  /// Suma kontrolna CRC8 obejmująca pola: start, count oraz samples.
+  /**
+    * @brief Suma kontrolna CRC8 obejmująca pola: start, count oraz samples.
+    */
   uint8_t crc;
 };
 #pragma pack(pop)

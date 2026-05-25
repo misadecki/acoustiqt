@@ -25,7 +25,7 @@
   */
 class SpectrumVisualizer : public QWidget {
   Q_OBJECT 
-  QList<double> spectrum_data;
+  QList<double> spectrum_data;  /**< @brief Lokalny bufor na ostatnio odebrane dane widma. */
 public:
   /**
   * @brief Inicjalizuje wizualizator widma. 

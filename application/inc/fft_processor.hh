@@ -61,12 +61,11 @@ struct AudioStats {
  */
 class FFTProcessor : public QObject {
   Q_OBJECT 
-  fftw_plan fft_plan;
-  double *fft_in;
-  fftw_complex *fft_out;
-  AudioStats stats;
-  /// Mnożnik wzmocnienia głośności sygnału wejściowego.
-  double volume_gain = 1.0;
+  fftw_plan fft_plan;        /**< @brief Struktura biblioteki FFTW definiująca optymalny plan obliczeń. */
+  double *fft_in;            /**< @brief Bufor wejściowy dla algorytmu FFT. */
+  fftw_complex *fft_out;     /**< @brief Bufor wyjściowy dla algorytmu FFT. */
+  AudioStats stats;          /**< @brief Struktura przechowująca aktualne statystyki sygnału. */
+  double volume_gain = 1.0;  /**< @brief Mnożnik wzmocnienia głośności sygnału wejściowego. */
 
   /**
   * @brief Oblicza widmo aplitudowe dla wartości z FFT.
@@ -109,6 +108,12 @@ public:
   */
   explicit FFTProcessor(QObject *parent = nullptr);
 
+  /**
+   * @brief Oblicza poziom głośności sygnału w decybelach na podstawie wartości RMS.
+   *
+   * @param[in] raw_samples -- referencja na listę z surowymi próbkami sygnału.
+   * @return double -- poziom głośności sygnału w [dBFS].
+   */
   double getDecibels(const QList<int32_t> &raw_samples); 
 
   /**
@@ -127,6 +132,12 @@ public slots:
   * @param[in] raw_samples -- referencja na listę z surowymi danymi.
   */
   void handleRawAudio(const QList<int32_t> &raw_samples);
+
+  /**
+   * @brief Ustawia wzmocnienie sygnału na połowę wartości (wartość domyślna).
+   *
+   * @param[in] value -- wartość ustawiana na suwaku bądź spinboxie w aplikacji.
+   */
   inline void setVolumeGain(uint8_t value) {this->volume_gain = value / 50.0;};
 signals:
   /**

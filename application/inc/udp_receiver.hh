@@ -23,7 +23,7 @@
  * wysyła sygnał o nowych danych do przetwarzania.
  */
 class UdpReceiver : public QObject {
-  QUdpSocket *udp_socket;
+  QUdpSocket *udp_socket;  /**< @brief Gniazdo UDP wykorzystywane do komunikacji sieciowej. */
   Q_OBJECT 
 public:
   /**
