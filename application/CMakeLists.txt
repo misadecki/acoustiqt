@@ -14,12 +14,14 @@ qt_add_executable(application
     src/spectrum_visualizer.cpp
     src/fft_processor.cpp
     src/mainwindow.ui
+    src/spectrogram_scale_widget.cpp
 
     inc/mainwindow.hh
     inc/udp_receiver.hh
     inc/spectrogram_visualizer.hh
     inc/spectrum_visualizer.hh
     inc/fft_processor.hh
+    inc/spectrogram_scale_widget.hh
 
     ../shared/protocol.hh
     ../shared/protocol.cpp

@@ -35,6 +35,8 @@ void MainWindow::setupLayouts() {
 }
 
 void MainWindow::initConnections() {
+  QObject::connect(ui->stackedWidget, &QStackedWidget::currentChanged,
+                   ui->controlStackedWidget, &QStackedWidget::setCurrentIndex);
   QObject::connect(ui->btn_spec, &QPushButton::clicked,
                    this, &MainWindow::spectrogramPageWidget);
   QObject::connect(ui->btn_return, &QPushButton::clicked, this, &MainWindow::mainPageWidget);
