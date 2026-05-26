@@ -36,6 +36,5 @@ int32_t Microphone::read_raw_data_to_buffer() {
     return -1;
   }
   last_sample = static_cast<int32_t>(bytes_read / sizeof(int32_t));
-  Serial.println("Wywolano read_raw_data_to_buffer");
   return last_sample;
 }

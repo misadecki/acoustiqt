@@ -3,6 +3,7 @@
 #include <QRect>
 #include <QtMinMax>
 #include "audio_config.hh"
+#include "axis_painter.hh"
 
 SpectrogramVisualizer::SpectrogramVisualizer(QWidget *parent) : QWidget(parent) {}
 

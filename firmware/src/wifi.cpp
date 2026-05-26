@@ -59,32 +59,24 @@ void WiFi_UDP::handle_disconnected() {
 }
 
 void WiFi_UDP::send_audio_data(const int32_t *raw_samples) {
-  Serial.println("Wywolano send_audio_data");
   if (!connected || raw_samples == nullptr) return;
 
   AudioFrame frame;
   frame.start = Protocol::START_BYTES;
   frame.count = packet_count++;
-  Serial.println("Utworzono paczke");
-  for (uint16_t i = 0; i < Protocol::SAMPLES_PER_PACKET; ++i) {
+  for (int32_t i = 0; i < Protocol::SAMPLES_PER_PACKET; ++i)
     frame.samples[i] = raw_samples[i];
-  }
-  Serial.println("Zapakowano paczke");
 
   frame.crc = Protocol::calculate_crc8(reinterpret_cast<const uint8_t*>(&frame),
                                        sizeof(AudioFrame) - 1,
                                        Protocol::POLYNOMIAL, Protocol::INIT_VAL);
-  Serial.println("Obliczono crc: ");
-  Serial.print(frame.crc);
 
   int begin_res = udp.beginPacket(UDP_ADDR, Protocol::PORT);
-  Serial.println("Utworzono paczke");
   if (begin_res == 0) {
     Serial.println("beginPacket error");
     return;
   }
   udp.write(reinterpret_cast<const uint8_t*>(&frame), sizeof(AudioFrame));
-  Serial.println("Zapisano paczke");
   udp.endPacket();
   Serial.println("Koniec send_audio_data");
 }

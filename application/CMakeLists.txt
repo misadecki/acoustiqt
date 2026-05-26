@@ -15,8 +15,10 @@ qt_add_executable(application
     src/fft_processor.cpp
     src/mainwindow.ui
     src/spectrogram_scale_widget.cpp
+    src/axis_painter.cpp
 
     inc/mainwindow.hh
+    inc/axis_painter.hh
     inc/udp_receiver.hh
     inc/spectrogram_visualizer.hh
     inc/spectrum_visualizer.hh

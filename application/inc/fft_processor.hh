@@ -67,6 +67,9 @@ class FFTProcessor : public QObject {
   AudioStats stats;          /**< @brief Struktura przechowująca aktualne statystyki sygnału. */
   double volume_gain = 1.0;  /**< @brief Mnożnik wzmocnienia głośności sygnału wejściowego. */
 
+
+  double calculateMean(const QList<int32_t> &raw_samples);
+
   /**
   * @brief Oblicza widmo aplitudowe dla wartości z FFT.
   * 

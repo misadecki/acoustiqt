@@ -1,6 +1,7 @@
 #include "spectrum_visualizer.hh"
 #include <QPainter>
 #include "audio_config.hh"
+#include "axis_painter.hh"
 
 SpectrumVisualizer::SpectrumVisualizer(QWidget *parent) : QWidget(parent) {}
 
@@ -15,6 +16,7 @@ void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
   if (spectrum_data.isEmpty()) return;
 
   QPainter painter(this);
+  QMarginsF margins(60.0, 15.0, 20.0, 50.0);
 
   if(!painter.isActive()) return;
 
@@ -23,6 +25,11 @@ void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
   double width = this->width();
   double height = this->height();
   int nbars = spectrum_data.size();
+
+  double draw_width = width - margins.left() - margins.right();
+  double draw_height = height - margins.top() - margins.bottom();
+
+  if (draw_height <= 0 || draw_width <= 0) return;
 
   double bar_width = static_cast<double>(width) / nbars;
   const double max_db = 0.0;
@@ -41,10 +48,14 @@ void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
     double normalized = (db - min_db) / (max_db - min_db);
     normalized = qBound(0.0, normalized, 1.0);
 
-    double bar_height = normalized * height;
-    double x = i * bar_width;
-    double y = height - bar_height;
-    double draw_width = std::max(1.0, bar_width - 1.0);
-    painter.fillRect(QRectF(x, y, draw_width, bar_height), QColor(0, 255, 150));
+    double bar_height = normalized * draw_height;
+    double x = margins.left() + (i * bar_width);
+    double y = margins.top() + draw_height - bar_height;
+    double draw_w = std::max(1.0, bar_width - 1.0);
+    painter.fillRect(QRectF(x, y, draw_w, bar_height), QColor(0, 255, 150));
   }
+  AxisPainter::drawXAxis(painter, width, height, margins, "Frequency [Hz]", 0.0,
+                         AudioConfig::SAMPLE_RATE / 2.0, 5);
+  AxisPainter::drawYAxis(painter, height, margins, "Amplitude spectrum [dBFS]", 
+                         -AudioConfig::NOISE_THRESHOLD, 0.0, 4);
 }

@@ -190,7 +190,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="comboBox">
+              <widget class="QComboBox" name="unitBox">
                <property name="minimumSize">
                 <size>
                  <width>50</width>
@@ -840,7 +840,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBox_2">
+         <widget class="QComboBox" name="lang_box">
           <item>
            <property name="text">
             <string>PL</string>

@@ -48,6 +48,9 @@ class MainWindow : public QMainWindow {
   FFTProcessor *processor;                        /**< @brief Silnik przetwarzający sygnał cyfrowy. */
   SpectrumVisualizer *spectrum_visualizer;        /**< @brief Widżet rysujący klasyczne widmo słupkowe (Spectrum). */
   SpectrogramVisualizer *spectrogram_visualizer;  /**< @brief Widżet rysujący spektrogram. */
+  bool is_running = true;
+  QTimer *timer;
+  AudioStats latest_stats;
 
   /**
   * @brief Alokuje pamięć dla obiektów zawartych w klasie. 
@@ -63,6 +66,9 @@ class MainWindow : public QMainWindow {
   * @brief Realizuje połączenia pomiędzy sygnałami i slotami.
   */
   void initConnections();
+
+
+  void initStatsConnections();
 
   /**
    * @brief Dynamicznie aktualizuje rozmiar i pozycję okienka z wyborem motywu.
@@ -85,6 +91,12 @@ private slots:
    * * @param[in] value -- aktualna pozycja suwaka w zakresie od 0 do 100.
    */
   void onVolumeSliderChanged(int value);
+
+  void on_btn_stop_clicked();
+
+  void onTimerTimeout();
+
+  inline void updateStats(const AudioStats &stats) { latest_stats = stats; }
 public:
   /**
    * @brief Konstruktor inicjalizujący główne okno aplikacji. Ustawia sygnały i sloty.

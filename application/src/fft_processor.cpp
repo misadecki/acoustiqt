@@ -22,18 +22,25 @@ QList<double> FFTProcessor::calculateMag() {
   return spectrum;
 }
 
+double FFTProcessor::calculateMean(const QList<int32_t> &raw_samples) {
+  if (raw_samples.isEmpty()) return 0.0;
+  double sum = 0.0;
+  for (int32_t sample : raw_samples)
+    sum += static_cast<double>(sample);
+
+  return sum / raw_samples.size();
+}
+
 void FFTProcessor::handleRawAudio(const QList<int32_t> &raw_samples) {
   if (raw_samples.size() < AudioConfig::N) return;
 
-  // qDebug() << "FFT dostało " << raw_samples.size() << "próbek, gain: " <<
-  //   volume_gain;
-  // qDebug() << "Próbka:" << raw_samples[0];
+  double mean = calculateMean(raw_samples);
 
-  for (uint16_t i = 0; i < AudioConfig::N; ++i) {
-    double sample = (static_cast<double>(raw_samples[i]) /
-      AudioConfig::MAX_INT32_T) * volume_gain;
-    double window = 0.5 * (1 - cos(2 * M_PI * i) / AudioConfig::N);
-    fft_in[i] = sample * window;
+  for (int32_t i = 0; i < AudioConfig::N; ++i) {
+    double centered = (static_cast<double>(raw_samples[i]) - mean) /
+      AudioConfig::MAX_INT32_T;
+    double window = 0.5 * (1.0 - cos(2.0 * M_PI * i) / AudioConfig::N);
+    fft_in[i] = centered * window * volume_gain;
   }
 
   fftw_execute(fft_plan);
@@ -42,6 +49,7 @@ void FFTProcessor::handleRawAudio(const QList<int32_t> &raw_samples) {
   stats.dominant_freq = calculateDominantFreq(magnitudes);
   stats.rms = calculateRMS(raw_samples);
   stats.zcr = calculateZCR(raw_samples);
+  stats.peak = calculatePeak(raw_samples);
   emit spectrumReady(magnitudes);
   emit statsReady(stats);
 }
@@ -49,12 +57,16 @@ void FFTProcessor::handleRawAudio(const QList<int32_t> &raw_samples) {
 double FFTProcessor::calculateRMS(const QList<int32_t> &raw_samples) {
   if (raw_samples.isEmpty()) return 0.0;
 
-  double sum = 0;
-  for (uint16_t i = 0; i < AudioConfig::N; ++i) {
-    double normalized_sample = static_cast<double>(raw_samples[i] / AudioConfig::MAX_INT32_T);
-    sum += normalized_sample * normalized_sample;
+  double mean = calculateMean(raw_samples);
+
+  double sum = 0.0;
+  for (int32_t sample : raw_samples) {
+    double centered = static_cast<double>(sample) - mean;
+    double normalized = (centered / AudioConfig::MAX_INT32_T) * volume_gain;
+    sum += normalized * normalized;
   }
-  return std::sqrt(sum / AudioConfig::N);
+  
+  return std::sqrt(sum / raw_samples.size());
 }
 
 double FFTProcessor::getDecibels(const QList<int32_t> &raw_samples) { 
@@ -64,17 +76,22 @@ double FFTProcessor::getDecibels(const QList<int32_t> &raw_samples) {
 }
 
 double FFTProcessor::calculateDominantFreq(const QList<double> &magnitudes) {
-  if (magnitudes.isEmpty()) return 0.0;
-  QList<double>::const_iterator it = std::max_element(magnitudes.begin(), magnitudes.end());
-  uint16_t max_index = std::distance(magnitudes.begin(), it);
-  return max_index * (AudioConfig::SAMPLE_RATE / static_cast<double>(AudioConfig::N));
+  if (magnitudes.size() < 4) return 0.0;
+  QList<double>::const_iterator it_start = magnitudes.begin() + 3;
+  QList<double>::const_iterator it_end = magnitudes.begin() + (magnitudes.size() / 2);
+
+  QList<double>::const_iterator it = std::max_element(it_start, it_end);
+  uint16_t max_idx = std::distance(magnitudes.begin(), it);
+
+  return max_idx * (static_cast<double>(AudioConfig::SAMPLE_RATE) /
+                    AudioConfig::N);
 }
 
 uint16_t FFTProcessor::calculateZCR(const QList<int32_t> &raw_samples) {
   if (raw_samples.isEmpty()) return 0.0;
 
   uint16_t crossings = 0;
-  for (uint16_t i = 0; i < AudioConfig::N; ++i) {
+  for (int32_t i = 1; i < AudioConfig::N; ++i) {
     if (raw_samples[i - 1] > 0 && raw_samples[i] < 0)
       ++crossings;
     else if (raw_samples[i - 1] < 0 && raw_samples[i] > 0)
@@ -85,13 +102,19 @@ uint16_t FFTProcessor::calculateZCR(const QList<int32_t> &raw_samples) {
 
 double FFTProcessor::calculatePeak(const QList<int32_t> &raw_samples) {
   if (raw_samples.isEmpty()) return 0.0;
+  double current_peak = 0.0;
+  double mean = calculateMean(raw_samples);
 
-  QList<int32_t>::const_iterator it = std::max_element(raw_samples.begin(),
-                                                       raw_samples.end(),
-                                                       [](int32_t a, int32_t b) {
-    return std::abs(a) < std::abs(b);
-  }); 
-  return std::abs(*it) / AudioConfig::MAX_INT32_T; 
+  for (int32_t sample : raw_samples) {
+    double centered = static_cast<double>(sample) - mean;
+    double normalized = (std::abs(centered) / AudioConfig::MAX_INT32_T) *
+      volume_gain;
+
+    if (normalized > current_peak)
+      current_peak = normalized;
+  }
+
+  return current_peak;
 }
 
 FFTProcessor::~FFTProcessor() {

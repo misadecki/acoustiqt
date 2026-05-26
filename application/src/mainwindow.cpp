@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "protocol.hh"
 #include <QSettings>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
   initObjects();
   setupLayouts();
   initConnections();
+  initStatsConnections();
   QSettings settings("KoNaR", "AcoustiQt");
   int saved_volume = settings.value("volumeSliderPos", 50).toInt();
   ui->verticalSlider->setValue(saved_volume);
@@ -27,11 +29,20 @@ void MainWindow::mainPageWidget() {
 void MainWindow::initObjects() {
   receiver = new UdpReceiver(Protocol::PORT, this);
   processor = new FFTProcessor(this);
+  timer = new QTimer(this);
 }
 
 void MainWindow::setupLayouts() {
   ui->theme_frame->setParent(this);
   ui->theme_frame->hide();
+}
+
+void MainWindow::initStatsConnections() {
+  QObject::connect(timer, &QTimer::timeout, this, &MainWindow::onTimerTimeout);
+  QObject::connect(processor, &FFTProcessor::statsReady, this,
+                   &MainWindow::updateStats);
+
+  timer->start(3000);
 }
 
 void MainWindow::initConnections() {
@@ -110,4 +121,31 @@ void MainWindow::updateThemeFrameSize() {
 
     ui->theme_frame->move(x, y);
   }
+}
+
+void MainWindow::on_btn_stop_clicked() {
+  if (is_running) {
+    QObject::disconnect(receiver, &UdpReceiver::audioDataReceived, processor,
+                        &FFTProcessor::handleRawAudio);
+    ui->btn_stop->setText("Resume");
+    is_running = false;
+  } else {
+    QObject::connect(receiver, &UdpReceiver::audioDataReceived, processor,
+                        &FFTProcessor::handleRawAudio);
+    ui->btn_stop->setText("Stop");
+    is_running = true;
+  }
+}
+
+void MainWindow::onTimerTimeout() {
+  ui->ledit_peak->setText(QString::number(latest_stats.peak, 'f', 4));
+  ui->ledit_zcr->setText(QString::number(latest_stats.zcr));
+  ui->ledit_rms->setText(QString::number(latest_stats.rms, 'f', 4));
+  double freq = latest_stats.dominant_freq;
+  QString unit = ui->unitBox->currentText();
+
+  if (unit == "kHz")
+    freq = freq / 1000.0;
+
+  ui->ledit_fd->setText(QString::number(freq, 'f', 2));
 }
