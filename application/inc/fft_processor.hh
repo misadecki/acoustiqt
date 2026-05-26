@@ -67,7 +67,11 @@ class FFTProcessor : public QObject {
   AudioStats stats;          /**< @brief Struktura przechowująca aktualne statystyki sygnału. */
   double volume_gain = 1.0;  /**< @brief Mnożnik wzmocnienia głośności sygnału wejściowego. */
 
-
+  /**
+   * @brief Oblicza wartość średnią (składową stałą) z podanej próbki sygnału.
+   * * @param[in] raw_samples -- lista surowych próbek audio.
+   * @return double -- wartość średnia. Zwraca 0.0, jeśli lista jest pusta.
+   */
   double calculateMean(const QList<int32_t> &raw_samples);
 
   /**

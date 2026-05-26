@@ -48,9 +48,9 @@ class MainWindow : public QMainWindow {
   FFTProcessor *processor;                        /**< @brief Silnik przetwarzający sygnał cyfrowy. */
   SpectrumVisualizer *spectrum_visualizer;        /**< @brief Widżet rysujący klasyczne widmo słupkowe (Spectrum). */
   SpectrogramVisualizer *spectrogram_visualizer;  /**< @brief Widżet rysujący spektrogram. */
-  bool is_running = true;
-  QTimer *timer;
-  AudioStats latest_stats;
+  bool is_running = true;                         /**< @brief Flaga określająca stan odbierania danych audio. */
+  QTimer *timer;                                  /**< @brief Wskaźnik na timer systemowy zarządzający odświeżaniem interfejsu użytkownika. */
+  AudioStats latest_stats;                        /**< @brief Struktura przechowująca najświeższe wyniki analizy sygnału. */
 
   /**
   * @brief Alokuje pamięć dla obiektów zawartych w klasie. 
@@ -67,7 +67,10 @@ class MainWindow : public QMainWindow {
   */
   void initConnections();
 
-
+  /**
+   * @brief Inicjalizuje połączenia sygnałów i slotów dla statystyk.
+   * Łączy timer z aktualizacją GUI oraz procesor FFT z odbiorem nowych wyników.
+   */
   void initStatsConnections();
 
   /**
@@ -92,10 +95,26 @@ private slots:
    */
   void onVolumeSliderChanged(int value);
 
+  /**
+   * @brief Obsługuje kliknięcie przycisku Stop/Resume.
+   * Zatrzymuje lub wznawia przepływ danych z odbiornika UDP do procesora FFT
+   * oraz odpowiednio aktualizuje tekst na przycisku.
+   */
   void on_btn_stop_clicked();
 
+  /**
+   * @brief Slot wywoływany cyklicznie przez timer.
+   * Pobiera najnowsze statystyki i aktualizuje odpowiednie pola tekstowe (QLineEdit) w GUI.
+   * Automatycznie przelicza jednostki (Hz na kHz), jeśli wybrano taką opcję.
+   */
   void onTimerTimeout();
 
+  
+  /**
+   * @brief Aktualizuje statystyki sygnału przechowywane w prywatnym polu klasy.
+   *
+   * @param[in] stats -- referencja na świeże statystyki sygnału.
+   */
   inline void updateStats(const AudioStats &stats) { latest_stats = stats; }
 public:
   /**

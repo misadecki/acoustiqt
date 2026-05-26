@@ -40,15 +40,42 @@ void SpectrogramVisualizer::addFFTLine(const QList<double> &latest_fft) {
 }
 
 QRgb SpectrogramVisualizer::magnitudeToColor(double magnitude) {
-  double db = 20 * std::log10(magnitude + AudioConfig::EPSILON) + AudioConfig::NOISE_THRESHOLD;
-  int val = qBound(0, static_cast<int32_t>((db / AudioConfig::NOISE_THRESHOLD) * AudioConfig::MAX_UINT8_T),
-                   static_cast<int32_t>(AudioConfig::MAX_UINT8_T));
+  if (std::isnan(magnitude) || magnitude <= 0.0) magnitude =
+    AudioConfig::EPSILON;
+
+  double db = 20 * std::log10(magnitude);
+  double min_db = -AudioConfig::NOISE_THRESHOLD;
+  double max_db = 0.0;
+
+  double normalized = (db - min_db) / (max_db - min_db);
+  normalized = qBound(0.0, normalized, 1.0);
+  int val = static_cast<int>(normalized * 255.0);
   return qRgb(val / 4, val, val / 2);
 }
 
 void SpectrogramVisualizer::paintEvent(QPaintEvent *event) {
   Q_UNUSED(event);
-  QPainter painter(this);
+  if (!this->isVisible() || this->width() <= 0 || this->height() <= 0) return;
 
-  painter.drawImage(rect(), image);
+  QPainter painter(this);
+  if (!painter.isActive()) return;
+
+  QMarginsF margins(60.0, 15.0, 20.0, 50.0);
+  painter.fillRect(rect(), Qt::black);
+  
+  double w = this->width();
+  double h = this->height();
+  double draw_w = w - margins.left() - margins.right();
+  double draw_h = h - margins.top() - margins.bottom();
+
+  if (draw_w <= 0 || draw_h <= 0) return;
+
+  if (!image.isNull()) {
+    QRectF targetRect(margins.left(), margins.top(), draw_w, draw_h);
+    painter.drawImage(targetRect, image);
+  }
+
+  AxisPainter::drawXAxis(painter, w, h, margins, "Time [s]", -10.0, 0.0, 5);
+  AxisPainter::drawYAxis(painter, h, margins, "Frequency [Hz]", 0.0,
+                         AudioConfig::SAMPLE_RATE / 2.0, 4);
 }
