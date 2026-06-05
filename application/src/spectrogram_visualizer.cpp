@@ -49,8 +49,21 @@ QRgb SpectrogramVisualizer::magnitudeToColor(double magnitude) {
 
   double normalized = (db - min_db) / (max_db - min_db);
   normalized = qBound(0.0, normalized, 1.0);
-  int val = static_cast<int>(normalized * 255.0);
-  return qRgb(val / 4, val, val / 2);
+  int r, g, b;
+
+  if (normalized < 0.5) {
+    double t = normalized * 2.0; 
+    r = static_cast<int>(t * 150);
+    g = 0;
+    b = static_cast<int>(t * 200);
+  } else {
+    double t = (normalized - 0.5) * 2.0;
+    r = static_cast<int>(150 + t * (255 - 150));
+    g = static_cast<int>(t * 255);
+    b = static_cast<int>(200 - t * 200); 
+  }
+
+  return qRgb(r, g, b);
 }
 
 void SpectrogramVisualizer::paintEvent(QPaintEvent *event) {

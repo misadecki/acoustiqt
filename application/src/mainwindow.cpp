@@ -3,11 +3,14 @@
 #include "protocol.hh"
 #include <QSettings>
 #include <QTimer>
+#include <QFile>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  loadTheme(":/themes/light.qss");
+  connectThemes();
   initObjects();
   setupLayouts();
   initConnections();
@@ -24,6 +27,21 @@ MainWindow::~MainWindow()
 
 void MainWindow::mainPageWidget() {
     ui->stackedWidget->setCurrentWidget(ui->page);
+}
+
+void MainWindow::connectThemes() {
+  connect(ui->btn_dark, &QPushButton::clicked, this, [this]() {
+    loadTheme(":/themes/dark.qss");
+  });
+
+  connect(ui->btn_light, &QPushButton::clicked, this, [this]() {
+    loadTheme(":/themes/light.qss");
+  });
+
+  connect(ui->btn_intensive, &QPushButton::clicked, this, [this]() {
+    loadTheme(":/themes/intense.qss");
+  });
+
 }
 
 void MainWindow::initObjects() {
@@ -148,4 +166,19 @@ void MainWindow::onTimerTimeout() {
     freq = freq / 1000.0;
 
   ui->ledit_fd->setText(QString::number(freq, 'f', 2));
+}
+
+void MainWindow::loadTheme(const QString &themePath) {
+  QFile file(themePath);
+
+  if (!file.open(QFile::ReadOnly | QFile::Text)) {
+    qWarning() << "Can't open theme file: " << themePath;
+    return;
+  }
+
+  QTextStream stream(&file);
+  QString css = stream.readAll();
+
+  qApp->setStyleSheet(css);
+  file.close();
 }

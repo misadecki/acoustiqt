@@ -3,7 +3,9 @@
 #include "audio_config.hh"
 #include "axis_painter.hh"
 
-SpectrumVisualizer::SpectrumVisualizer(QWidget *parent) : QWidget(parent) {}
+SpectrumVisualizer::SpectrumVisualizer(QWidget *parent) : QWidget(parent) {
+  setAttribute(Qt::WA_StyledBackground, true);
+}
 
 void SpectrumVisualizer::updateSpectrum(const QList<double> &data) {
   spectrum_data = data;
@@ -20,7 +22,7 @@ void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
 
   if(!painter.isActive()) return;
 
-  painter.fillRect(rect(), Qt::black);
+  painter.fillRect(rect(), qRgb(200, 200, 200));
 
   double width = this->width();
   double height = this->height();
@@ -52,7 +54,12 @@ void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
     double x = margins.left() + (i * bar_width);
     double y = margins.top() + draw_height - bar_height;
     double draw_w = std::max(1.0, bar_width - 1.0);
-    painter.fillRect(QRectF(x, y, draw_w, bar_height), QColor(0, 255, 150));
+
+    QLinearGradient gradient(x, y, x, y + bar_height);
+    gradient.setColorAt(0.0, QColor(255, 255, 0));
+    gradient.setColorAt(0.5, QColor(170, 85, 255));
+    gradient.setColorAt(1.0, QColor(85, 0, 127));
+    painter.fillRect(QRectF(x, y, draw_w, bar_height), gradient);
   }
   AxisPainter::drawXAxis(painter, width, height, margins, "Frequency [Hz]", 0.0,
                          AudioConfig::SAMPLE_RATE / 2.0, 5);

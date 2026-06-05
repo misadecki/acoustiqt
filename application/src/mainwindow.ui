@@ -63,7 +63,7 @@
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(127, 127, 127);</string>
+             <string notr="true"/>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_11">
              <item>
@@ -197,6 +197,9 @@
                  <height>0</height>
                 </size>
                </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
                <item>
                 <property name="text">
                  <string>kHz</string>
@@ -205,11 +208,6 @@
                <item>
                 <property name="text">
                  <string>Hz</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>MHz</string>
                 </property>
                </item>
               </widget>
@@ -369,10 +367,6 @@
             <property name="autoFillBackground">
              <bool>false</bool>
             </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgba(126, 126, 126, 180);
-</string>
-            </property>
             <property name="frameShape">
              <enum>QFrame::Shape::StyledPanel</enum>
             </property>
@@ -461,6 +455,9 @@
                      <pointsize>18</pointsize>
                     </font>
                    </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
                    <property name="styleSheet">
                     <string notr="true">background-color: rgb(173, 173, 173);</string>
                    </property>
@@ -468,8 +465,8 @@
                     <string>Light</string>
                    </property>
                    <property name="icon">
-                    <iconset>
-                     <normaloff>../imgs/sun.png</normaloff>../imgs/sun.png</iconset>
+                    <iconset resource="../resources/resources.qrc">
+                     <normaloff>:/imgs/sun.png</normaloff>:/imgs/sun.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -500,15 +497,18 @@
                      <pointsize>18</pointsize>
                     </font>
                    </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
                    <property name="styleSheet">
                     <string notr="true">background-color: rgb(255, 170, 0);</string>
                    </property>
                    <property name="text">
-                    <string>Intensive</string>
+                    <string>Intense</string>
                    </property>
                    <property name="icon">
-                    <iconset>
-                     <normaloff>../imgs/view.png</normaloff>../imgs/view.png</iconset>
+                    <iconset resource="../resources/resources.qrc">
+                     <normaloff>:/imgs/view.png</normaloff>:/imgs/view.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -551,6 +551,9 @@
                      <family>Blockletter</family>
                      <pointsize>18</pointsize>
                     </font>
+                   </property>
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
                    </property>
                    <property name="styleSheet">
                     <string notr="true">background-color: rgb(40, 40, 40);</string>
@@ -608,6 +611,9 @@
                    <family>Blockletter</family>
                    <pointsize>18</pointsize>
                   </font>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
                  </property>
                  <property name="text">
                   <string>Cancel</string>
@@ -679,6 +685,9 @@
                   <height>81</height>
                  </size>
                 </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
                 <property name="text">
                  <string>Change theme</string>
                 </property>
@@ -703,6 +712,12 @@
                   <width>16777215</width>
                   <height>81</height>
                  </size>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>Spectrogram</string>
@@ -841,6 +856,9 @@
         </item>
         <item>
          <widget class="QComboBox" name="lang_box">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
           <item>
            <property name="text">
             <string>PL</string>
@@ -908,6 +926,12 @@ QSlider::groove:vertical {
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
           <property name="maximum">
            <number>100</number>
           </property>
@@ -951,6 +975,8 @@ QSlider::groove:vertical {
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources/resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

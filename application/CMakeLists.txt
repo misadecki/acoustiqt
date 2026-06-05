@@ -16,6 +16,7 @@ qt_add_executable(application
     src/mainwindow.ui
     src/spectrogram_scale_widget.cpp
     src/axis_painter.cpp
+    resources/resources.qrc
 
     inc/mainwindow.hh
     inc/axis_painter.hh

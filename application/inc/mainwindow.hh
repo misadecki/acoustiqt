@@ -81,6 +81,10 @@ class MainWindow : public QMainWindow {
    * automatycznie centrowana na środku okna głównego.
    */
   void updateThemeFrameSize();
+
+  void connectThemes();
+
+  void loadTheme(const QString &themePath);
   Q_OBJECT
 
 private slots:
