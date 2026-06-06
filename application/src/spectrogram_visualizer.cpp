@@ -88,7 +88,7 @@ void SpectrogramVisualizer::paintEvent(QPaintEvent *event) {
     painter.drawImage(targetRect, image);
   }
 
-  AxisPainter::drawXAxis(painter, w, h, margins, "Time [s]", -10.0, 0.0, 5);
-  AxisPainter::drawYAxis(painter, h, margins, "Frequency [Hz]", 0.0,
+  AxisPainter::drawXAxis(painter, w, h, margins, tr("Time [s]"), -10.0, 0.0, 5);
+  AxisPainter::drawYAxis(painter, h, margins, tr("Frequency [Hz]"), 0.0,
                          AudioConfig::SAMPLE_RATE / 2.0, 4);
 }

@@ -15,10 +15,10 @@ MainWindow::MainWindow(QWidget *parent)
   setupLayouts();
   initConnections();
   initStatsConnections();
-  QSettings settings("KoNaR", "AcoustiQt");
-  int saved_volume = settings.value("volumeSliderPos", 50).toInt();
-  ui->verticalSlider->setValue(saved_volume);
-  db_client = new InfluxClient(this);
+  initLanguages();
+  setPreviousSettings();
+  updateLanguages();
+  alignObjects();
 }
 
 MainWindow::~MainWindow()
@@ -45,10 +45,45 @@ void MainWindow::connectThemes() {
 
 }
 
+void MainWindow::setPreviousSettings() {
+  QSettings settings("KoNaR", "AcoustiQt");
+  int saved_volume = settings.value("volumeSliderPos", 50).toInt();
+  QString saved_lang = settings.value("SavedLanguage", "pl").toString();
+  int saved_idx = ui->lang_box->findData(saved_lang);
+  if (saved_idx != -1)
+    ui->lang_box->setCurrentIndex(saved_idx);
+  ui->verticalSlider->setValue(saved_volume);
+}
+
+void MainWindow::initLanguages() {
+  ui->lang_box->setItemData(0, "pl");
+  ui->lang_box->setItemData(1, "en");
+}
+
+void MainWindow::updateLanguages() {
+  connect(ui->lang_box, QOverload<int>::of(&QComboBox::currentIndexChanged),
+          this, &MainWindow::changeLanguage);
+  changeLanguage(ui->lang_box->currentIndex());
+}
+
+void MainWindow::alignObjects() {
+  ui->lang_box->setEditable(true);
+  ui->lang_box->lineEdit()->setAlignment(Qt::AlignCenter);
+  ui->lang_box->lineEdit()->setReadOnly(true);
+  ui->lang_box->lineEdit()->installEventFilter(this);
+  ui->lang_box->setItemData(0, Qt::AlignCenter, Qt::TextAlignmentRole);
+  ui->lang_box->setItemData(1, Qt::AlignCenter, Qt::TextAlignmentRole);
+  ui->lang_box->lineEdit()->setCursor(Qt::PointingHandCursor);
+  ui->unitBox->setItemData(0, Qt::AlignCenter, Qt::TextAlignmentRole);
+  ui->unitBox->setItemData(1, Qt::AlignCenter, Qt::TextAlignmentRole);
+  ui->lang_flag->setAlignment(Qt::AlignCenter);
+}
+
 void MainWindow::initObjects() {
   receiver = new UdpReceiver(Protocol::PORT, this);
   processor = new FFTProcessor(this);
   timer = new QTimer(this);
+  db_client = new InfluxClient(this);
 }
 
 void MainWindow::setupLayouts() {
@@ -183,4 +218,34 @@ void MainWindow::loadTheme(const QString &themePath) {
 
   qApp->setStyleSheet(css);
   file.close();
+}
+
+void MainWindow::changeLanguage(int index) {
+  QString langCode = ui->lang_box->itemData(index).toString();
+
+  if (app_translator.load(":/i18n/app_" + langCode + ".qm")) {
+    qApp->installTranslator(&app_translator);
+    ui->retranslateUi(this);
+  }
+
+  QString flagPath = QString(":/flags/imgs/%1.png").arg(langCode);
+  QPixmap flagImg(flagPath);
+
+  if (!flagImg.isNull()) {
+    ui->lang_flag->setPixmap(flagImg.scaled(56, 40, Qt::KeepAspectRatio,
+                                            Qt::SmoothTransformation));
+  }
+
+  QSettings settings("KoNaR", "AcoustiQt");
+  settings.setValue("SavedLanguage", langCode);
+}
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
+  if (watched == ui->lang_box->lineEdit() && event->type() ==
+    QEvent::MouseButtonRelease) {
+    ui->lang_box->showPopup();
+    return true;
+  }
+
+  return QMainWindow::eventFilter(watched, event);
 }

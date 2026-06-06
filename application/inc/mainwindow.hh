@@ -23,6 +23,7 @@
 #include "fft_processor.hh"
 #include "spectrogram_visualizer.hh"
 #include "influx_client.hh"
+#include <QTranslator>
 
 QT_BEGIN_NAMESPACE
 /**
@@ -53,6 +54,8 @@ class MainWindow : public QMainWindow {
   QTimer *timer;                                  /**< Wskaźnik na timer systemowy zarządzający odświeżaniem interfejsu użytkownika. */
   AudioStats latest_stats;                        /**< Struktura przechowująca najświeższe wyniki analizy sygnału. */
   InfluxClient *db_client;
+  QTranslator app_translator;
+
 
   /**
   * @brief Alokuje pamięć dla obiektów zawartych w klasie. 
@@ -84,7 +87,15 @@ class MainWindow : public QMainWindow {
    */
   void updateThemeFrameSize();
 
+  void initLanguages();
+
   void connectThemes();
+
+  void setPreviousSettings();
+
+  void updateLanguages();
+
+  void alignObjects();
 
   void loadTheme(const QString &themePath);
   Q_OBJECT
@@ -100,6 +111,9 @@ private slots:
    * * @param[in] value -- aktualna pozycja suwaka w zakresie od 0 do 100.
    */
   void onVolumeSliderChanged(int value);
+
+
+  void changeLanguage(int index);
 
   /**
    * @brief Obsługuje kliknięcie przycisku Stop/Resume.
@@ -135,6 +149,8 @@ public:
    */
   ~MainWindow() override;
 protected:
+
+  bool eventFilter(QObject *watched, QEvent *event) override;
   /**
   * @brief Przelicza rozmiar okna w zależności od skali ustalonej przez
   * użytkownika.

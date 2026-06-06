@@ -61,8 +61,8 @@ void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
     gradient.setColorAt(1.0, QColor(85, 0, 127));
     painter.fillRect(QRectF(x, y, draw_w, bar_height), gradient);
   }
-  AxisPainter::drawXAxis(painter, width, height, margins, "Frequency [Hz]", 0.0,
+  AxisPainter::drawXAxis(painter, width, height, margins, tr("Frequency [Hz]"), 0.0,
                          AudioConfig::SAMPLE_RATE / 2.0, 5);
-  AxisPainter::drawYAxis(painter, height, margins, "Amplitude spectrum [dBFS]", 
+  AxisPainter::drawYAxis(painter, height, margins, tr("Amplitude spectrum [dBFS]"), 
                          -AudioConfig::NOISE_THRESHOLD, 0.0, 4);
 }

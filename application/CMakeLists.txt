@@ -21,6 +21,13 @@ install(
   DESTINATION share/icons/hicolor/scalable/apps
 )
 
+qt_add_translations(application
+    TS_FILES
+        i18n/app_pl.ts
+        i18n/app_en.ts
+    RESOURCE_PREFIX "/i18n"
+)
+
 qt_add_executable(application
     WIN32 MACOSX_BUNDLE
     src/main.cpp

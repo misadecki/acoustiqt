@@ -58,7 +58,7 @@ QPushButton {
     background-color: qlineargradient(spread:pad, x1:0.495, y1:1, x2:0.493165, y2:0.004, stop:0 rgba(172, 172, 172, 255), stop:1 rgba(200, 200, 200, 255));
     border: 1px solid #3F4A41;
     border-radius: 3px;
-    padding: 6px 8px;
+    padding: 2px 2px;
     color: #11111b;
     outline: none; 
 }

@@ -8,4 +8,8 @@
     <file>imgs/view.png</file>
     <file>imgs/acoustiqt.svg</file>
   </qresource>
+  <qresource prefix="/flags">
+    <file>imgs/pl.png</file>
+    <file>imgs/en.png</file>
+  </qresource>
 </RCC>
