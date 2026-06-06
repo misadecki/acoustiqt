@@ -50,6 +50,8 @@ struct AudioStats {
     * Pozwala na wstępne odróżnienie szumu od sygnałów sinusoidalnych.
     */
   uint16_t zcr;
+
+  double dbfs;
 };
 
 /**

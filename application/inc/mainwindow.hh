@@ -22,6 +22,7 @@
 #include "spectrum_visualizer.hh"
 #include "fft_processor.hh"
 #include "spectrogram_visualizer.hh"
+#include "influx_client.hh"
 
 QT_BEGIN_NAMESPACE
 /**
@@ -43,14 +44,15 @@ QT_END_NAMESPACE
  * Dziedziczy po QMainWindow, dostarczając standardową strukturę okna.
  */
 class MainWindow : public QMainWindow {
-  Ui::MainWindow *ui;                             /**< @brief Wskaźnik na wygenerowany interfejs użytkownika. */
-  UdpReceiver *receiver;                          /**< @brief Moduł odpowiedzialny za nasłuchiwanie i odbiór strumienia audio. */
-  FFTProcessor *processor;                        /**< @brief Silnik przetwarzający sygnał cyfrowy. */
-  SpectrumVisualizer *spectrum_visualizer;        /**< @brief Widżet rysujący klasyczne widmo słupkowe (Spectrum). */
-  SpectrogramVisualizer *spectrogram_visualizer;  /**< @brief Widżet rysujący spektrogram. */
-  bool is_running = true;                         /**< @brief Flaga określająca stan odbierania danych audio. */
-  QTimer *timer;                                  /**< @brief Wskaźnik na timer systemowy zarządzający odświeżaniem interfejsu użytkownika. */
-  AudioStats latest_stats;                        /**< @brief Struktura przechowująca najświeższe wyniki analizy sygnału. */
+  Ui::MainWindow *ui;                             /**< Wskaźnik na wygenerowany interfejs użytkownika. */
+  UdpReceiver *receiver;                          /**< Moduł odpowiedzialny za nasłuchiwanie i odbiór strumienia audio. */
+  FFTProcessor *processor;                        /**< Silnik przetwarzający sygnał cyfrowy. */
+  SpectrumVisualizer *spectrum_visualizer;        /**< Widżet rysujący klasyczne widmo słupkowe (Spectrum). */
+  SpectrogramVisualizer *spectrogram_visualizer;  /**< Widżet rysujący spektrogram. */
+  bool is_running = true;                         /**< Flaga określająca stan odbierania danych audio. */
+  QTimer *timer;                                  /**< Wskaźnik na timer systemowy zarządzający odświeżaniem interfejsu użytkownika. */
+  AudioStats latest_stats;                        /**< Struktura przechowująca najświeższe wyniki analizy sygnału. */
+  InfluxClient *db_client;
 
   /**
   * @brief Alokuje pamięć dla obiektów zawartych w klasie. 

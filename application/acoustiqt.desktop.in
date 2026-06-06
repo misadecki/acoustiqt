@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=AcoustiQt
+Comment="Spectrum and spectrogram visualizer"
+Exec=@CMAKE_INSTALL_PREFIX@/bin/AcoustiQt
+Icon=acoustiqt
+Terminal=false
+Categories=Science

@@ -6,5 +6,6 @@
     <file>themes/intense.qss</file>
     <file>imgs/sun.png</file>
     <file>imgs/view.png</file>
+    <file>imgs/acoustiqt.svg</file>
   </qresource>
 </RCC>

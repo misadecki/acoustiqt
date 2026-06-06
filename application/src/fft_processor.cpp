@@ -50,6 +50,7 @@ void FFTProcessor::handleRawAudio(const QList<int32_t> &raw_samples) {
   stats.rms = calculateRMS(raw_samples);
   stats.zcr = calculateZCR(raw_samples);
   stats.peak = calculatePeak(raw_samples);
+  stats.dbfs = getDecibels(raw_samples);
   emit spectrumReady(magnitudes);
   emit statsReady(stats);
 }
@@ -71,8 +72,8 @@ double FFTProcessor::calculateRMS(const QList<int32_t> &raw_samples) {
 
 double FFTProcessor::getDecibels(const QList<int32_t> &raw_samples) { 
   double rms = calculateRMS(raw_samples);
-  if (rms < 0.00001) return 0.0;
-  return 20 * std::log10(rms) + AudioConfig::NOISE_THRESHOLD;
+  if (rms < 0.00001) return -AudioConfig::NOISE_THRESHOLD;
+  return 20 * std::log10(rms);
 }
 
 double FFTProcessor::calculateDominantFreq(const QList<double> &magnitudes) {

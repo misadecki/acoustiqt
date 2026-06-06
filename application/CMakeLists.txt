@@ -5,6 +5,22 @@ set(CMAKE_AUTORCC ON)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(FFTW REQUIRED fftw3)
 
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/acoustiqt.desktop.in
+  ${CMAKE_CURRENT_BINARY_DIR}/acoustiqt.desktop
+  @ONLY
+)
+
+install(
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/acoustiqt.desktop
+  DESTINATION share/applications
+)
+
+install(
+  FILES resources/imgs/acoustiqt.svg
+  DESTINATION share/icons/hicolor/scalable/apps
+)
+
 qt_add_executable(application
     WIN32 MACOSX_BUNDLE
     src/main.cpp
@@ -16,6 +32,8 @@ qt_add_executable(application
     src/mainwindow.ui
     src/spectrogram_scale_widget.cpp
     src/axis_painter.cpp
+    src/influx_client.cpp
+
     resources/resources.qrc
 
     inc/mainwindow.hh
@@ -25,6 +43,7 @@ qt_add_executable(application
     inc/spectrum_visualizer.hh
     inc/fft_processor.hh
     inc/spectrogram_scale_widget.hh
+    inc/influx_client.hh
 
     ../shared/protocol.hh
     ../shared/protocol.cpp
@@ -43,6 +62,7 @@ target_link_libraries(application
         Qt6::Core
         Qt6::Widgets
         Qt6::Network
+        Qt6::Svg
         ${FFTW_LIBRARIES}
 )
 

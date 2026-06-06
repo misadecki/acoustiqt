@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
   QSettings settings("KoNaR", "AcoustiQt");
   int saved_volume = settings.value("volumeSliderPos", 50).toInt();
   ui->verticalSlider->setValue(saved_volume);
+  db_client = new InfluxClient(this);
 }
 
 MainWindow::~MainWindow()
@@ -166,6 +167,7 @@ void MainWindow::onTimerTimeout() {
     freq = freq / 1000.0;
 
   ui->ledit_fd->setText(QString::number(freq, 'f', 2));
+  db_client->sendStats(latest_stats);
 }
 
 void MainWindow::loadTheme(const QString &themePath) {
