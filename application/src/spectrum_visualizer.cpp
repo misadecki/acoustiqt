@@ -62,7 +62,7 @@ void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
     QLinearGradient gradient(x, y, x, y + bar_height);
     gradient.setColorAt(0.0, colors.grad1); 
     gradient.setColorAt(0.5, colors.grad2);
-    gradient.setColorAt(1.0, colors.grad2);
+    gradient.setColorAt(1.0, colors.grad3);
     painter.fillRect(QRectF(x, y, draw_w, bar_height), gradient);
   }
 

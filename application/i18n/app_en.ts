@@ -84,35 +84,36 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="817"/>
+        <location filename="../src/mainwindow.ui" line="820"/>
         <source>Return</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="851"/>
+        <location filename="../src/mainwindow.ui" line="854"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="880"/>
+        <location filename="../src/mainwindow.ui" line="883"/>
         <source>TextLabel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="894"/>
+        <location filename="../src/mainwindow.ui" line="897"/>
         <source>PL</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="899"/>
+        <location filename="../src/mainwindow.ui" line="902"/>
         <source>ENG</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="269"/>
-        <location filename="../src/mainwindow.cpp" line="297"/>
-        <location filename="../src/mainwindow.cpp" line="313"/>
-        <location filename="../src/mainwindow.cpp" line="327"/>
+        <location filename="../src/mainwindow.cpp" line="272"/>
+        <location filename="../src/mainwindow.cpp" line="299"/>
+        <location filename="../src/mainwindow.cpp" line="315"/>
+        <location filename="../src/mainwindow.cpp" line="329"/>
         <source>Unknown</source>
         <translation></translation>
     </message>
@@ -120,12 +121,12 @@
 <context>
     <name>SpectrogramVisualizer</name>
     <message>
-        <location filename="../src/spectrogram_visualizer.cpp" line="96"/>
+        <location filename="../src/spectrogram_visualizer.cpp" line="102"/>
         <source>Time [s]</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/spectrogram_visualizer.cpp" line="98"/>
+        <location filename="../src/spectrogram_visualizer.cpp" line="104"/>
         <source>Frequency [Hz]</source>
         <translation></translation>
     </message>

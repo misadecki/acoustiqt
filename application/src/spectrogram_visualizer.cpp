@@ -56,17 +56,23 @@ QRgb SpectrogramVisualizer::magnitudeToColor(double magnitude) {
 
   if (normalized < 0.5) {
     double t = normalized * 2.0; 
-    r = static_cast<int>(t * 150);
-    g = 0;
-    b = static_cast<int>(t * 200);
+    r = static_cast<int>(colors.grad3.red() + t * colors.grad2.red() -
+                         colors.grad3.red());
+    g = static_cast<int>(colors.grad3.green() + t * colors.grad2.green() -
+                         colors.grad3.green());
+    b = static_cast<int>(colors.grad3.blue() + t * colors.grad2.blue() -
+                         colors.grad3.blue());
   } else {
     double t = (normalized - 0.5) * 2.0;
-    r = static_cast<int>(150 + t * (255 - 150));
-    g = static_cast<int>(t * 255);
-    b = static_cast<int>(200 - t * 200); 
+    r = static_cast<int>(colors.grad2.red() + t * colors.grad1.red() -
+                         colors.grad2.red());
+    g = static_cast<int>(colors.grad2.green() + t * colors.grad1.green() -
+                         colors.grad2.green());
+    b = static_cast<int>(colors.grad2.blue() + t * colors.grad1.blue() -
+                         colors.grad2.blue());
   }
 
-  return qRgb(r, g, b);
+  return qRgb(qBound(0, r, 255), qBound(0, g, 255), qBound(0, b, 255));
 }
 
 void SpectrogramVisualizer::paintEvent(QPaintEvent *event) {

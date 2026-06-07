@@ -48,6 +48,9 @@ public:
       colors.background = QColor("#11111B");
       colors.axis = QColor("#FFFFFF");
     } else if (themeName == "intense") {
+      colors.grad1 = QColor("#F0E442");
+      colors.grad2 = QColor("#0072B2");
+      colors.grad3 = QColor("#000000");
       colors.background = QColor("#831DA3");
       colors.axis = QColor("#FFFFFF");
     }

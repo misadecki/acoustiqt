@@ -1,15 +1,89 @@
-QMainWindow {
-  background-color: #2b2b2b;
+QWidget {
+    background-color: #11111B;
+    color: #CDD6F4;
+    font-family: "Sans Serif", sans-serif;
+    font-size: 13px;
+}
+
+QWidget#page_3 {
+    background-color: transparent;
+}
+
+QFrame#theme_frame {
+    background-color: rgba(49, 50, 68, 180);
+    border-radius: 10px;
+}
+
+QWidget#statistics_widget {
+    background-color: #313244;
+    border: 2px solid #45475A;
+    border-radius: 5px;
+}
+
+QWidget#statistics_widget QLabel {
+    background-color: transparent; 
+    font-family: "Blockletter", sans-serif;
+    font-size: 16px;
+    color: #FFFFFF; 
+}
+
+QWidget#page_3 QPushButton,
+QWidget#page_3 QLabel,
+QFrame#theme_frame QPushButton,
+QFrame#theme_frame QLabel {
+    font-family: "Blockletter", sans-serif;
+    font-size: 30px;
+}
+
+QLabel#theme_label {
+    background-color: rgba(131, 29, 163, 60); 
+    border: 2px solid rgba(131, 29, 163, 150); 
+    border-radius: 5px;
+    padding: 6px;
+    color: #FFFFFF;
+}
+
+QLineEdit {
+    background-color: #1E1E2E;
+    border: 1px solid #45475A;
+    border-radius: 3px;
+    padding: 4px;
+    color: #321052;
 }
 
 QPushButton {
-  background-color: #3c3f41;
-  color: #a9b7c6;
-  border: 1px solid #555555;
-  padding: 5px;
-  border-radius: 3px;
+    background-color: qlineargradient(spread:pad, x1:0.495, y1:1, x2:0.493165, y2:0.004, stop:0 #313244, stop:1 #45475A);
+    border: 1px solid #585B70;
+    border-radius: 3px;
+    padding: 2px 2px;
+    color: #FFFFFF;
+    outline: none; 
 }
 
 QPushButton:hover {
-    background-color: #4c5052;
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #AA55FF, stop:1 #831DA3);
+    border-color: #D4AAFF;
+    color: #FFFFFF;
+}
+
+QPushButton:pressed {
+    background-color: #5C1175;
+    color: #E0E0E0;
+}
+
+QPushButton#btn_dark {
+    color: #FFFFFF;
+}
+
+QSlider::add-page:vertical {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, 
+        stop:0 rgba(255, 255, 0, 255),   
+        stop:0.5 rgba(170, 0, 255, 255), 
+        stop:1 rgba(17, 17, 27, 255));      
+    border-radius: 3px;
+}
+
+QSlider::sub-page:vertical {
+    background-color: #313244;
+    border-radius: 3px;
 }
