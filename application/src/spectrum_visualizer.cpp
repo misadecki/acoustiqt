@@ -37,7 +37,7 @@ void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
 
   if (draw_height <= 0 || draw_width <= 0) return;
 
-  double bar_width = static_cast<double>(width) / nbars;
+  double bar_width = draw_width / nbars;
   const double max_db = 0.0;
   const double min_db = -AudioConfig::NOISE_THRESHOLD;
 

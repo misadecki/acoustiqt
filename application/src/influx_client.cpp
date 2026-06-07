@@ -24,8 +24,8 @@ void InfluxClient::sendStats(const AudioStats &stats) {
   request.setHeader(QNetworkRequest::ContentTypeHeader, "text/plain; charset=utf-8");
 
   qint64 timestamp = QDateTime::currentMSecsSinceEpoch();
-  QString data_line = QString("audio,device=esp32"
-                              "rms=%1,peak=%2,zcr=%3,freq=%4,dbfs=%5, %6")
+  QString data_line = QString("audio,device=esp32 "
+                              "rms=%1,peak=%2,zcr=%3,freq=%4,dbfs=%5 %6")
                           .arg(stats.rms, 0, 'f', 4)
                           .arg(stats.peak, 0, 'f', 4)
                           .arg(stats.zcr)
@@ -35,7 +35,7 @@ void InfluxClient::sendStats(const AudioStats &stats) {
   QNetworkReply *reply = manager->post(request, data_line.toUtf8());
   connect(reply, &QNetworkReply::finished, reply, &QNetworkReply::deleteLater);
 
-  // connect(reply, &QNetworkReply::errorOccurred, [reply]() {
-  //         qDebug() << "InfluxDB error: " << reply->errorString();
-  // });
+  connect(reply, &QNetworkReply::errorOccurred, [reply]() {
+          qDebug() << "InfluxDB error: " << reply->errorString();
+  });
 }
