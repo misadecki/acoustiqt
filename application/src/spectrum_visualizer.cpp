@@ -69,9 +69,11 @@ void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
 
   setxAxisTitle();
   AxisPainter::drawXAxis(painter, width, height, margins, xAxisTitle, 0.0,
-                         AudioConfig::SAMPLE_RATE / 2.0, 5, current_format);
+                         AudioConfig::SAMPLE_RATE / 2.0, 5, current_format,
+                         axisColor);
   AxisPainter::drawYAxis(painter, height, margins, tr("Amplitude spectrum [dBFS]"), 
-                         -AudioConfig::NOISE_THRESHOLD, 0.0, 4, current_format);
+                         -AudioConfig::NOISE_THRESHOLD, 0.0, 4, current_format,
+                         axisColor);
 }
 
 void SpectrumVisualizer::setxAxisTitle() {
@@ -91,5 +93,19 @@ void SpectrumVisualizer::setxAxisTitle() {
 
 void SpectrumVisualizer::setFrequencyFormat(AxisFormat format) {
   current_format = format;
+  update();
+}
+
+void SpectrumVisualizer::applyThemeColors(const QString &themeName) {
+  if (themeName == "light") {
+    bgColor = QColor("#EDEDED");
+    axisColor = QColor("#321052");
+  } else if (themeName == "dark") {
+    bgColor = QColor("#11111B");
+    axisColor = QColor("#FFFFFF");
+  } else if (themeName == "intense") {
+    bgColor = QColor("#831DA3");
+    axisColor = QColor("#FFFFFF");
+  }
   update();
 }

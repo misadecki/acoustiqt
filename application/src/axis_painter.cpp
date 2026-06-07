@@ -2,8 +2,8 @@
 
 void AxisPainter::drawXAxis(QPainter &painter, double width, double height,
                       const QMarginsF &margins, const QString &title, double min, double
-                      max, int numTicks, AxisFormat format) {
-  painter.setPen(Qt::white);
+                      max, int numTicks, AxisFormat format, QColor axisColor) {
+  painter.setPen(axisColor);
   painter.setFont(QFont("Sans Serif", 8));
   QFontMetrics fm = painter.fontMetrics();
 
@@ -43,8 +43,8 @@ void AxisPainter::drawXAxis(QPainter &painter, double width, double height,
 
 void AxisPainter::drawYAxis(QPainter &painter, double height,
                         const QMarginsF &margins, const QString &title, double min, double
-                        max, int numTicks, AxisFormat format) {
-  painter.setPen(Qt::white);
+                        max, int numTicks, AxisFormat format, QColor axisColor) {
+  painter.setPen(axisColor);
   painter.setFont(QFont("Sans Serif", 8));
   QFontMetrics fm = painter.fontMetrics();
   double draw_h = height - margins.top() - margins.bottom();

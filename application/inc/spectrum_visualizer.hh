@@ -29,10 +29,13 @@ class SpectrumVisualizer : public QWidget {
   AxisFormat current_format = AxisFormat::Auto;
   QList<double> spectrum_data;  /**< Lokalny bufor na ostatnio odebrane dane widma. */
   QString xAxisTitle;
+  QColor bgColor = QColor(Qt::lightGray);
+  QColor axisColor = QColor(Qt::black);
 
   void setxAxisTitle();
 public:
   void setFrequencyFormat(AxisFormat format);
+  void applyThemeColors(const QString &themeName);
 
   /**
   * @brief Inicjalizuje wizualizator widma. 

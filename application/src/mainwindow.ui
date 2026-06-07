@@ -351,6 +351,12 @@
            <height>0</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Blockletter</family>
+           <pointsize>18</pointsize>
+          </font>
+         </property>
          <layout class="QHBoxLayout" name="horizontalLayout_13" stretch="0">
           <item>
            <widget class="QFrame" name="theme_frame">
@@ -368,6 +374,12 @@
               <width>500</width>
               <height>300</height>
              </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Blockletter</family>
+              <pointsize>18</pointsize>
+             </font>
             </property>
             <property name="autoFillBackground">
              <bool>false</bool>
@@ -408,6 +420,7 @@
                  <property name="font">
                   <font>
                    <family>Blockletter</family>
+                   <pointsize>18</pointsize>
                   </font>
                  </property>
                  <property name="frameShape">

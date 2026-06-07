@@ -44,7 +44,8 @@ public:
    */
   static void drawXAxis(QPainter &painter, double width, double height,
                       const QMarginsF &margins, const QString &title, double min, double
-                      max, int numTicks, AxisFormat format = AxisFormat::Auto);
+                      max, int numTicks, AxisFormat format = AxisFormat::Auto,
+                        QColor axisColor = Qt::white);
   /**
    * @brief Rysuje pionową oś Y wraz z podziałką, etykietami i obróconym tytułem.
    * * @param[in] painter -- referencja do obiektu malarza (QPainter).
@@ -57,7 +58,8 @@ public:
    */
   static void drawYAxis(QPainter &painter, double height,
                         const QMarginsF &margins, const QString &title, double min, double
-                        max, int numTicks, AxisFormat format = AxisFormat::Auto);
+                        max, int numTicks, AxisFormat format = AxisFormat::Auto,
+                        QColor axisColor = Qt::white);
 };
 
 #endif // AXIS_PAINTER_HH

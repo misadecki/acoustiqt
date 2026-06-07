@@ -240,6 +240,8 @@ void MainWindow::loadTheme(const QString &themeName) {
 
   QSettings settings(org, application);
   settings.setValue("SavedTheme", themeName);
+
+  ui->spectrum_widget->applyThemeColors(themeName);
 }
 
 void MainWindow::changeLanguage(int index) {
