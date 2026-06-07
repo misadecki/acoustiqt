@@ -56,6 +56,8 @@ public:
   */
   explicit SpectrogramVisualizer(QWidget *parent = nullptr) :
     BaseVisualizer(parent) {}
+
+  void clearData();
 };
 
 #endif 

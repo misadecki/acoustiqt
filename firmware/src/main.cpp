@@ -11,7 +11,6 @@ void setup() {
   wifi = new WiFi_UDP();
   wifi->init_wifi();
   mic = new Microphone(12, 13, 14);
-  Serial.println("[ID] ESP32 S3 DEV KIT");
 }
 
 void loop() {

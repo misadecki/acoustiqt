@@ -16,7 +16,6 @@ void SpectrumVisualizer::updateSpectrum(const QList<double> &data) {
 void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
   Q_UNUSED(event);
   if (!this->isVisible() || this->width() <= 0 || this->height() <= 0) return;
-  if (spectrum_data.isEmpty()) return;
 
   QPainter painter(this);
   QMarginsF margins(60.0, 15.0, 20.0, 50.0);
@@ -93,5 +92,10 @@ void SpectrumVisualizer::setxAxisTitle() {
 
 void SpectrumVisualizer::setFrequencyFormat(AxisFormat format) {
   current_format = format;
+  update();
+}
+
+void SpectrumVisualizer::clearData() {
+  spectrum_data.clear();
   update();
 }

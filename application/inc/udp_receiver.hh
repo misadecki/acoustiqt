@@ -14,6 +14,7 @@
 #include <QObject>
 #include <QUdpSocket>
 #include <QList>
+#include <QTimer>
 
 /**
  * @class UdpReceiver
@@ -24,6 +25,8 @@
  */
 class UdpReceiver : public QObject {
   QUdpSocket *udp_socket;  /**< @brief Gniazdo UDP wykorzystywane do komunikacji sieciowej. */
+  QTimer *watchdog;
+  bool isConnected = false;
   Q_OBJECT 
 public:
   /**
@@ -33,6 +36,8 @@ public:
    * @param[in] parent -- wskaźnik na rodzica obiektu
    */
   UdpReceiver(uint16_t port, QObject * parent = nullptr);
+
+  bool isCurrentlyConnected() const {return isConnected; }
 signals:
   /**
   * @brief Sygnał, który informuje, że odebrano dane.
@@ -40,6 +45,9 @@ signals:
   * @param[out] samples -- referencja na listę próbek, które odebrano.
   */
   void audioDataReceived(const QList<int32_t>& samples);
+
+  void connectionRestored();
+  void connectionLost();
 
 private slots:
   /**
@@ -50,6 +58,7 @@ private slots:
   * sygnał o odebraniu danych.
   */
   void readPendingDatagrams();
+  void onWatchdogTimeout();
 };
 
 #endif

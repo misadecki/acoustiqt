@@ -15,10 +15,22 @@ UdpReceiver::UdpReceiver(uint16_t port, QObject * parent) : QObject(parent) {
 
   connect(udp_socket, &QUdpSocket::readyRead, this,
           &UdpReceiver::readPendingDatagrams);
+
+  watchdog = new QTimer(this);
+  watchdog->setInterval(1500);
+  connect(watchdog, &QTimer::timeout, this, &UdpReceiver::onWatchdogTimeout);
+  watchdog->start();
 }
 
 void UdpReceiver::readPendingDatagrams() {
   while (udp_socket->hasPendingDatagrams()) {
+    watchdog->start();
+
+    if (!isConnected) {
+      isConnected = true;
+      emit connectionRestored();
+    }
+
     QByteArray datagram;
     datagram.resize(static_cast<int>(udp_socket->pendingDatagramSize()));
 
@@ -54,5 +66,12 @@ void UdpReceiver::readPendingDatagrams() {
               samples_list.begin());
     // qDebug() << "Otrzymano dane: " << samples_list.size();
     emit audioDataReceived(samples_list);
+  }
+}
+
+void UdpReceiver::onWatchdogTimeout() {
+  if (isConnected) {
+    isConnected = false;
+    emit connectionLost();
   }
 }

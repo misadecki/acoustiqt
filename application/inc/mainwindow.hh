@@ -96,7 +96,11 @@ class MainWindow : public QMainWindow {
 
   void updateLanguages();
 
+  void setDisconnectedState();
+
   void alignObjects();
+
+  void connectWatchdog();
 
   void connectAxisUnits();
 
@@ -113,7 +117,6 @@ private slots:
    * * @param[in] value -- aktualna pozycja suwaka w zakresie od 0 do 100.
    */
   void onVolumeSliderChanged(int value);
-
 
   void changeLanguage(int index);
 

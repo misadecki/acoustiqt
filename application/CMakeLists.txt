@@ -59,6 +59,28 @@ qt_add_executable(application
     ../shared/audio_config.hh
 )
 
+set(PIO_FILE "${CMAKE_SOURCE_DIR}/firmware/platformio.ini")
+
+get_filename_component(PIO_FILE_ABS "${PIO_FILE}" ABSOLUTE)
+
+if(EXISTS "${PIO_FILE}")
+    file(READ "${PIO_FILE}" PIO_CONTENT)
+    string(REGEX MATCH "board[ \t]*=[ \t]*([a-zA-Z0-9_-]+)" MATCH_RESULT
+    "${PIO_CONTENT}")
+
+    if(CMAKE_MATCH_1)
+        set(ESP_BOARD_NAME "${CMAKE_MATCH_1}")
+    else()
+        set(ESP_BOARD_NAME "null")
+    endif()
+else()
+    set(ESP_BOARD_NAME "null")
+endif()
+
+message(STATUS "Detected ESP: ${ESP_BOARD_NAME}")
+
+target_compile_definitions(application PRIVATE BOARD_MODEL="${ESP_BOARD_NAME}")
+
 target_include_directories(application PRIVATE 
     "${CMAKE_CURRENT_SOURCE_DIR}/inc"
     "${CMAKE_CURRENT_SOURCE_DIR}/../shared"

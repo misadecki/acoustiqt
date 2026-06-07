@@ -34,6 +34,8 @@ class SpectrumVisualizer : public BaseVisualizer {
 public:
   void setFrequencyFormat(AxisFormat format);
 
+  void clearData();
+
   /**
   * @brief Inicjalizuje wizualizator widma. 
   *

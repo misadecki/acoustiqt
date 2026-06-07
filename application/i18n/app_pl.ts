@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pl_PL" sourcelanguage="en_US">
+<TS version="2.1" language="pl_PL">
 <context>
     <name>MainWindow</name>
     <message>
@@ -24,9 +24,9 @@
         <translation>Dom. częst.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="215"/>
-        <source>kHz</source>
-        <translation>kHz</translation>
+        <location filename="../src/mainwindow.ui" line="205"/>
+        <source>Auto</source>
+        <translation>Auto</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="210"/>
@@ -34,9 +34,9 @@
         <translation>Hz</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="205"/>
-        <source>Auto</source>
-        <translation>Auto</translation>
+        <location filename="../src/mainwindow.ui" line="215"/>
+        <source>kHz</source>
+        <translation>kHz</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="229"/>
@@ -108,16 +108,24 @@
         <source>ENG</source>
         <translation>ENG</translation>
     </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="269"/>
+        <location filename="../src/mainwindow.cpp" line="297"/>
+        <location filename="../src/mainwindow.cpp" line="313"/>
+        <location filename="../src/mainwindow.cpp" line="327"/>
+        <source>Unknown</source>
+        <translation>Nieznane</translation>
+    </message>
 </context>
 <context>
     <name>SpectrogramVisualizer</name>
     <message>
-        <location filename="../src/spectrogram_visualizer.cpp" line="91"/>
+        <location filename="../src/spectrogram_visualizer.cpp" line="96"/>
         <source>Time [s]</source>
         <translation>Czas [s]</translation>
     </message>
     <message>
-        <location filename="../src/spectrogram_visualizer.cpp" line="92"/>
+        <location filename="../src/spectrogram_visualizer.cpp" line="98"/>
         <source>Frequency [Hz]</source>
         <translation>Częstotliwość [Hz]</translation>
     </message>
@@ -125,28 +133,24 @@
 <context>
     <name>SpectrumVisualizer</name>
     <message>
-        <location filename="../src/spectrum_visualizer.cpp" line="80"/>
-        <source>Frequency [Hz]</source>
-        <translation>Częstotliwość [Hz]</translation>
-    </message>
-    <message>
-        <location filename="../src/spectrum_visualizer.cpp" line="83"/>
-        <source>Frequency [kHz]</source>
-        <translation>Częstotliwość [kHz]</translation>
-    </message>
-    <message>
-        <location filename="../src/spectrum_visualizer.cpp" line="87"/>
-        <source>Frequency [Hz/kHz]</source>
-        <translation>Częstotliwość [Hz/kHz]</translation>
-    </message>
-    <message>
         <location filename="../src/spectrum_visualizer.cpp" line="73"/>
         <source>Amplitude spectrum [dBFS]</source>
         <translation>Widmo amplitudowe [dBFS]</translation>
     </message>
     <message>
-        <source>Amplitude spectrum [dBFS])</source>
-        <translation type="vanished">Widmo amplitudowe [dBFS]</translation>
+        <location filename="../src/spectrum_visualizer.cpp" line="81"/>
+        <source>Frequency [Hz]</source>
+        <translation>Częstotliwość [Hz]</translation>
+    </message>
+    <message>
+        <location filename="../src/spectrum_visualizer.cpp" line="84"/>
+        <source>Frequency [kHz]</source>
+        <translation>Częstotliwość [kHz]</translation>
+    </message>
+    <message>
+        <location filename="../src/spectrum_visualizer.cpp" line="88"/>
+        <source>Frequency [Hz/kHz]</source>
+        <translation>Częstotliwość [Hz/kHz]</translation>
     </message>
 </context>
 </TS>

@@ -86,6 +86,8 @@ void SpectrogramVisualizer::paintEvent(QPaintEvent *event) {
 
   if (draw_w <= 0 || draw_h <= 0) return;
 
+  painter.setRenderHint(QPainter::SmoothPixmapTransform);
+
   if (!image.isNull()) {
     QRectF targetRect(margins.left(), margins.top(), draw_w, draw_h);
     painter.drawImage(targetRect, image);
@@ -95,4 +97,11 @@ void SpectrogramVisualizer::paintEvent(QPaintEvent *event) {
                          AxisFormat::Auto, colors.axis);
   AxisPainter::drawYAxis(painter, h, margins, tr("Frequency [Hz]"), 0.0,
                          AudioConfig::SAMPLE_RATE / 2.0, 4, AxisFormat::Auto, colors.axis);
+}
+
+void SpectrogramVisualizer::clearData() {
+  if (!image.isNull()) {
+    image.fill(colors.background);
+    update();
+  }
 }

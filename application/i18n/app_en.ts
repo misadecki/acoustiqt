@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="en_US" sourcelanguage="en_US">
+<TS version="2.1" language="en_US">
 <context>
     <name>MainWindow</name>
     <message>
@@ -24,8 +24,8 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="215"/>
-        <source>kHz</source>
+        <location filename="../src/mainwindow.ui" line="205"/>
+        <source>Auto</source>
         <translation></translation>
     </message>
     <message>
@@ -34,9 +34,9 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="205"/>
-        <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/mainwindow.ui" line="215"/>
+        <source>kHz</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="229"/>
@@ -86,12 +86,12 @@
     <message>
         <location filename="../src/mainwindow.ui" line="817"/>
         <source>Return</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="851"/>
         <source>Stop</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="880"/>
@@ -108,16 +108,24 @@
         <source>ENG</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="269"/>
+        <location filename="../src/mainwindow.cpp" line="297"/>
+        <location filename="../src/mainwindow.cpp" line="313"/>
+        <location filename="../src/mainwindow.cpp" line="327"/>
+        <source>Unknown</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>SpectrogramVisualizer</name>
     <message>
-        <location filename="../src/spectrogram_visualizer.cpp" line="91"/>
+        <location filename="../src/spectrogram_visualizer.cpp" line="96"/>
         <source>Time [s]</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/spectrogram_visualizer.cpp" line="92"/>
+        <location filename="../src/spectrogram_visualizer.cpp" line="98"/>
         <source>Frequency [Hz]</source>
         <translation></translation>
     </message>
@@ -125,23 +133,23 @@
 <context>
     <name>SpectrumVisualizer</name>
     <message>
-        <location filename="../src/spectrum_visualizer.cpp" line="80"/>
+        <location filename="../src/spectrum_visualizer.cpp" line="73"/>
+        <source>Amplitude spectrum [dBFS]</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../src/spectrum_visualizer.cpp" line="81"/>
         <source>Frequency [Hz]</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/spectrum_visualizer.cpp" line="83"/>
+        <location filename="../src/spectrum_visualizer.cpp" line="84"/>
         <source>Frequency [kHz]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../src/spectrum_visualizer.cpp" line="87"/>
+        <location filename="../src/spectrum_visualizer.cpp" line="88"/>
         <source>Frequency [Hz/kHz]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/spectrum_visualizer.cpp" line="73"/>
-        <source>Amplitude spectrum [dBFS]</source>
         <translation></translation>
     </message>
 </context>

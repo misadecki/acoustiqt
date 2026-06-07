@@ -4,6 +4,9 @@
 #include <QSettings>
 #include <QTimer>
 #include <QFile>
+#ifndef BOARD_MODEL
+  #define BOARD_MODEL "null"
+#endif
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -136,6 +139,7 @@ void MainWindow::initConnections() {
   QObject::connect(processor, &FFTProcessor::spectrumReady,
                    ui->spectrogram_widget, &SpectrogramVisualizer::addFFTLine);
   connectAxisUnits();
+  connectWatchdog();
 }
 
 void MainWindow::spectrogramPageWidget() {
@@ -211,6 +215,9 @@ void MainWindow::on_btn_stop_clicked() {
 }
 
 void MainWindow::onTimerTimeout() {
+  if (!receiver->isCurrentlyConnected()) {
+    return;
+  }
   ui->ledit_peak->setText(QString::number(latest_stats.peak, 'f', 4));
   ui->ledit_zcr->setText(QString::number(latest_stats.zcr));
   ui->ledit_rms->setText(QString::number(latest_stats.rms, 'f', 4));
@@ -252,6 +259,18 @@ void MainWindow::changeLanguage(int index) {
   if (app_translator.load(":/i18n/app_" + langCode + ".qm")) {
     qApp->installTranslator(&app_translator);
     ui->retranslateUi(this);
+
+    if (receiver && receiver->isCurrentlyConnected()) {
+      QString board(BOARD_MODEL);
+
+      if (board != "null") {
+        ui->ledit_source->setText(board);
+      } else {
+        ui->ledit_source->setText(tr("Unknown"));
+      }
+    } else {
+      ui->ledit_source->setText(tr("Unknown"));
+    }
   }
 
   QString flagPath = QString(":/flags/imgs/%1.png").arg(langCode);
@@ -274,4 +293,42 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event) {
   }
 
   return QMainWindow::eventFilter(watched, event);
+}
+
+void MainWindow::setDisconnectedState() {
+  ui->ledit_source->setText(tr("Unknown"));
+  ui->ledit_fd->clear();
+  ui->ledit_zcr->clear();
+  ui->ledit_rms->clear();
+  ui->ledit_peak->clear();
+  ui->spectrum_widget->clearData();
+  ui->spectrogram_widget->clearData();
+  timer->stop();
+}
+
+void MainWindow::connectWatchdog() {
+  connect(receiver, &UdpReceiver::connectionRestored, this, [this]() {
+    QString board(BOARD_MODEL);
+    if (board != "null") {
+      ui->ledit_source->setText(board);
+    } else {
+      ui->ledit_source->setText(tr("Unknown"));
+    }
+    timer->start(3000);
+  });
+
+  connect(receiver, &UdpReceiver::connectionLost, this,
+          &MainWindow::setDisconnectedState);
+
+  if (receiver->isCurrentlyConnected()) {
+    QString board(BOARD_MODEL);
+    timer->start(3000);
+    if (board != "null") {
+      ui->ledit_source->setText(board);
+    } else {
+      ui->ledit_source->setText(tr("Unknown"));
+    }
+  } else {
+    setDisconnectedState();
+  }
 }
