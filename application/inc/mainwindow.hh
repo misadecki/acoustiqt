@@ -55,6 +55,7 @@ class MainWindow : public QMainWindow {
   AudioStats latest_stats;                        /**< Struktura przechowująca najświeższe wyniki analizy sygnału. */
   InfluxClient *db_client;
   QTranslator app_translator;
+  const QString org = "KoNaR", application = "AcoustiQt";
 
 
   /**
@@ -97,9 +98,10 @@ class MainWindow : public QMainWindow {
 
   void alignObjects();
 
+  void connectAxisUnits();
+
   void loadTheme(const QString &themePath);
   Q_OBJECT
-
 private slots:
   /**
    * @brief Obsługuje zmianę wartości na suwaku głośności.

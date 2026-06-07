@@ -26,16 +26,14 @@ QWidget#statistics_widget QLabel {
     color: #FFFFFF; 
 }
 
-QWidget#page_3 QPushButton,
-QWidget#page_3 QLabel {
-    font-family: "Blockletter", sans-serif;
-    font-size: 18px;
-    background-color: transparent; 
-}
-
-QPushButton#btn_cancel {
-    font-family: "Blockletter", sans-serif;
-    font-size: 18px;
+QLabel#theme_label
+QPushButton#btn_cancel
+QPushButton#btn_dark
+QPushButton#btn_light
+QPushButton#btn_intensive {
+  font-family: "Blockletter", sans-serif;
+  font-size: 18px;
+  background-color: transparent;
 }
 
 QLabel#theme_label {

@@ -202,12 +202,17 @@
                </property>
                <item>
                 <property name="text">
-                 <string>kHz</string>
+                 <string>Auto</string>
                 </property>
                </item>
                <item>
                 <property name="text">
                  <string>Hz</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>kHz</string>
                 </property>
                </item>
               </widget>

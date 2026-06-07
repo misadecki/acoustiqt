@@ -1,5 +1,6 @@
 #include "spectrum_visualizer.hh"
 #include <QPainter>
+#include <QPainterPath>
 #include "audio_config.hh"
 #include "axis_painter.hh"
 
@@ -21,6 +22,10 @@ void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
   QMarginsF margins(60.0, 15.0, 20.0, 50.0);
 
   if(!painter.isActive()) return;
+
+  QPainterPath clipPath;
+  clipPath.addRoundedRect(rect(), 5.0, 5.0);
+  painter.setClipPath(clipPath);
 
   painter.fillRect(rect(), qRgb(200, 200, 200));
 
@@ -61,8 +66,30 @@ void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
     gradient.setColorAt(1.0, QColor(85, 0, 127));
     painter.fillRect(QRectF(x, y, draw_w, bar_height), gradient);
   }
-  AxisPainter::drawXAxis(painter, width, height, margins, tr("Frequency [Hz]"), 0.0,
-                         AudioConfig::SAMPLE_RATE / 2.0, 5);
+
+  setxAxisTitle();
+  AxisPainter::drawXAxis(painter, width, height, margins, xAxisTitle, 0.0,
+                         AudioConfig::SAMPLE_RATE / 2.0, 5, current_format);
   AxisPainter::drawYAxis(painter, height, margins, tr("Amplitude spectrum [dBFS]"), 
-                         -AudioConfig::NOISE_THRESHOLD, 0.0, 4);
+                         -AudioConfig::NOISE_THRESHOLD, 0.0, 4, current_format);
+}
+
+void SpectrumVisualizer::setxAxisTitle() {
+  switch (current_format) {
+    case AxisFormat::Hz:
+      xAxisTitle = tr("Frequency [Hz]");
+      break;
+    case AxisFormat::kHz:
+      xAxisTitle = tr("Frequency [kHz]");
+      break;
+    case AxisFormat::Auto:
+    default:
+      xAxisTitle = tr("Frequency [Hz/kHz]");
+      break;
+  }
+}
+
+void SpectrumVisualizer::setFrequencyFormat(AxisFormat format) {
+  current_format = format;
+  update();
 }

@@ -2,7 +2,7 @@
 
 void AxisPainter::drawXAxis(QPainter &painter, double width, double height,
                       const QMarginsF &margins, const QString &title, double min, double
-                      max, int numTicks) {
+                      max, int numTicks, AxisFormat format) {
   painter.setPen(Qt::white);
   painter.setFont(QFont("Sans Serif", 8));
   QFontMetrics fm = painter.fontMetrics();
@@ -20,10 +20,16 @@ void AxisPainter::drawXAxis(QPainter &painter, double width, double height,
     painter.drawLine(x_pos, margins.top() + draw_h, x_pos, margins.top() + draw_h + 5);
 
     QString label;
-    if (x >= 1000.0)
+    if (format == AxisFormat::kHz)
       label = QString::number(x / 1000.0, 'f', 1) + "k";
-    else 
+    else if (format == AxisFormat::Hz)
       label = QString::number(static_cast<int>(x));
+    else {
+      if (x >= 1000.0)
+        label = QString::number(x / 1000.0, 'f', 1) + "k";
+      else
+        label = QString::number(static_cast<int>(x));
+    }
 
     int text_w = fm.horizontalAdvance(label);
 
@@ -37,7 +43,7 @@ void AxisPainter::drawXAxis(QPainter &painter, double width, double height,
 
 void AxisPainter::drawYAxis(QPainter &painter, double height,
                         const QMarginsF &margins, const QString &title, double min, double
-                        max, int numTicks) {
+                        max, int numTicks, AxisFormat format) {
   painter.setPen(Qt::white);
   painter.setFont(QFont("Sans Serif", 8));
   QFontMetrics fm = painter.fontMetrics();
@@ -55,10 +61,16 @@ void AxisPainter::drawYAxis(QPainter &painter, double height,
 
     QString label = QString::number(static_cast<int>(y));
 
-    if (y >= 1000.0)
-      label = QString::number(y / 1000.0, 'f', 1) + "k";
-    else 
+    if (format == AxisFormat::kHz)
+      label = QString::number(y / 1000.0, 'f', 1);
+    else if (format == AxisFormat::Hz)
       label = QString::number(static_cast<int>(y));
+    else {
+      if (y >= 1000.0)
+        label = QString::number(y / 1000.0, 'f', 1) + "k";
+      else
+        label = QString::number(static_cast<int>(y));
+    }
 
     int text_w = fm.horizontalAdvance(label);
 

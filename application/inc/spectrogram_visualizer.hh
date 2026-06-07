@@ -33,7 +33,7 @@ class SpectrogramVisualizer : public QWidget {
   * @param[in] magnitude -- wartość amplitudy [dB]
   */
   QRgb magnitudeToColor(double magnitude);
-  QImage image;  /**< @brief Obraz przechowujący bufor graficzny (Off-screen rendering). */
+  QImage image;  /**< Obraz przechowujący bufor graficzny (Off-screen rendering). */
 protected:
   /**
   * @brief Obsługuje cykl rysownaia widżetu spektrogramu.

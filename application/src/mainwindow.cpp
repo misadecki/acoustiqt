@@ -9,7 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  loadTheme(":/themes/light.qss");
   connectThemes();
   initObjects();
   setupLayouts();
@@ -32,27 +31,45 @@ void MainWindow::mainPageWidget() {
 
 void MainWindow::connectThemes() {
   connect(ui->btn_dark, &QPushButton::clicked, this, [this]() {
-    loadTheme(":/themes/dark.qss");
+    loadTheme("dark");
   });
 
   connect(ui->btn_light, &QPushButton::clicked, this, [this]() {
-    loadTheme(":/themes/light.qss");
+    loadTheme("light");
   });
 
   connect(ui->btn_intensive, &QPushButton::clicked, this, [this]() {
-    loadTheme(":/themes/intense.qss");
+    loadTheme("intense");
   });
+}
 
+void MainWindow::connectAxisUnits() {
+  connect(ui->unitBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+          this, [this](int index) {
+            AxisFormat format = static_cast<AxisFormat>(index);
+            ui->spectrum_widget->setFrequencyFormat(format);
+
+            QSettings settings(org, application);
+            settings.setValue("FreqFormat", index);
+  });
 }
 
 void MainWindow::setPreviousSettings() {
-  QSettings settings("KoNaR", "AcoustiQt");
+  QSettings settings(org, application);
   int saved_volume = settings.value("volumeSliderPos", 50).toInt();
   QString saved_lang = settings.value("SavedLanguage", "pl").toString();
+  int saved_freq_format = settings.value("FreqFormat", 0).toInt();
   int saved_idx = ui->lang_box->findData(saved_lang);
   if (saved_idx != -1)
     ui->lang_box->setCurrentIndex(saved_idx);
   ui->verticalSlider->setValue(saved_volume);
+  ui->unitBox->setCurrentIndex(saved_freq_format);
+
+  AxisFormat init_format = static_cast<AxisFormat>(saved_freq_format);
+  ui->spectrum_widget->setFrequencyFormat(init_format);
+
+  QString saved_theme = settings.value("SavedTheme", "light").toString();
+  loadTheme(saved_theme);
 }
 
 void MainWindow::initLanguages() {
@@ -76,6 +93,7 @@ void MainWindow::alignObjects() {
   ui->lang_box->lineEdit()->setCursor(Qt::PointingHandCursor);
   ui->unitBox->setItemData(0, Qt::AlignCenter, Qt::TextAlignmentRole);
   ui->unitBox->setItemData(1, Qt::AlignCenter, Qt::TextAlignmentRole);
+  ui->unitBox->setItemData(2, Qt::AlignCenter, Qt::TextAlignmentRole);
   ui->lang_flag->setAlignment(Qt::AlignCenter);
 }
 
@@ -117,6 +135,7 @@ void MainWindow::initConnections() {
                    ui->spectrum_widget, &SpectrumVisualizer::updateSpectrum);
   QObject::connect(processor, &FFTProcessor::spectrumReady,
                    ui->spectrogram_widget, &SpectrogramVisualizer::addFFTLine);
+  connectAxisUnits();
 }
 
 void MainWindow::spectrogramPageWidget() {
@@ -156,7 +175,7 @@ void MainWindow::onVolumeSliderChanged(int value) {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  QSettings settings("KoNaR", "AcoustiQt");
+  QSettings settings(org, application);
   settings.setValue("volumeSliderPos", ui->verticalSlider->value());
   QMainWindow::closeEvent(event);
 }
@@ -205,11 +224,11 @@ void MainWindow::onTimerTimeout() {
   db_client->sendStats(latest_stats);
 }
 
-void MainWindow::loadTheme(const QString &themePath) {
-  QFile file(themePath);
+void MainWindow::loadTheme(const QString &themeName) {
+  QFile file(QString(":/themes/%1.qss").arg(themeName));
 
   if (!file.open(QFile::ReadOnly | QFile::Text)) {
-    qWarning() << "Can't open theme file: " << themePath;
+    qWarning() << "Can't open theme file: " << QString(":/themes/%1.qss").arg(themeName);
     return;
   }
 
@@ -218,6 +237,9 @@ void MainWindow::loadTheme(const QString &themePath) {
 
   qApp->setStyleSheet(css);
   file.close();
+
+  QSettings settings(org, application);
+  settings.setValue("SavedTheme", themeName);
 }
 
 void MainWindow::changeLanguage(int index) {
@@ -236,7 +258,7 @@ void MainWindow::changeLanguage(int index) {
                                             Qt::SmoothTransformation));
   }
 
-  QSettings settings("KoNaR", "AcoustiQt");
+  QSettings settings(org, application);
   settings.setValue("SavedLanguage", langCode);
 }
 

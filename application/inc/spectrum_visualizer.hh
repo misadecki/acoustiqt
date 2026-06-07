@@ -15,6 +15,7 @@
 #include <QObject>
 #include <QList>
 #include <QWidget>
+#include "axis_painter.hh"
 
 /**
   * @class SpectrumVisualizer
@@ -25,8 +26,14 @@
   */
 class SpectrumVisualizer : public QWidget {
   Q_OBJECT 
-  QList<double> spectrum_data;  /**< @brief Lokalny bufor na ostatnio odebrane dane widma. */
+  AxisFormat current_format = AxisFormat::Auto;
+  QList<double> spectrum_data;  /**< Lokalny bufor na ostatnio odebrane dane widma. */
+  QString xAxisTitle;
+
+  void setxAxisTitle();
 public:
+  void setFrequencyFormat(AxisFormat format);
+
   /**
   * @brief Inicjalizuje wizualizator widma. 
   *
