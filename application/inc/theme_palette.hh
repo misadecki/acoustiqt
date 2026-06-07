@@ -1,18 +1,39 @@
+/**
+ * @file theme_palette.hh
+ * @author Michał Sadecki (michal.sadecki@proton.me)
+ * @brief Plik zawierający definicje kolorów wizualizatorów oraz klasę narzędziową zarządzającą paletami dla różnych motywów.
+ * @version 1.0
+ * @date 2026-06-07
+ *
+ * @copyright Copyright (c) 2026 Michał Sadecki
+ */
+
 #ifndef THEME_PALETTE_HH
 #define THEME_PALETTE_HH
 
 #include <QColor>
 
+/**
+ * @brief Struktura przechowująca paletę kolorów wykorzystywaną do rysowania wykresów.
+ */
 struct VisualizerColors {
-  QColor background;
-  QColor axis;
-  QColor grad1;
-  QColor grad2;
-  QColor grad3;
+  QColor background;    /**< Kolor tła wizualizatora. */
+  QColor axis;          /**< Kolor osi. */
+  QColor grad1;         /**< Pierwszy (najniższy) kolor gradientu widma lub spektrogramu. */
+  QColor grad2;         /**< Drugi (środkowy) kolor gradientu. */
+  QColor grad3;         /**< Trzeci (najwyższy/szczytowy) kolor gradientu. */
 };
 
+/**
+ * @brief Klasa dostarczająca predefiniowane zestawy kolorów dla poszczególnych motywów aplikacji.
+ */
 class ThemePalette {
 public:
+  /**
+   * @brief Zwraca zestaw kolorów @ref VisualizerColors dopasowany do podanej nazwy motywu.
+   * @param[in] themeName -- azwa wybranego motywu (np. "light", "dark", "intense").
+   * @return VisualizerColors -- struktura z zainicjowanymi barwami dla tła, osi i gradientów.
+   */
   static VisualizerColors getColors(const QString &themeName) {
     VisualizerColors colors;
 

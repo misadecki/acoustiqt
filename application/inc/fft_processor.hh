@@ -3,7 +3,7 @@
  * @author Michał Sadecki (michal.sadecki@proton.me)
  * @brief Implementacja zasadniczych obliczeń dla próbek odbieranego sygnału.
  * Wyznaczanie FFT i podstawowych parametrów.
- * @version 0.5
+ * @version 1.0
  * @date 2026-05-12
  *
  * @copyright Copyright (c) 2026 Michał Sadecki
@@ -50,7 +50,9 @@ struct AudioStats {
     * Pozwala na wstępne odróżnienie szumu od sygnałów sinusoidalnych.
     */
   uint16_t zcr;
-
+  /**
+   * @brief Wartość sygnału wyrażona w decybelach względem pełnej skali (dBFS - Decibels relative to Full Scale).
+   */
   double dbfs;
 };
 
@@ -63,11 +65,11 @@ struct AudioStats {
  */
 class FFTProcessor : public QObject {
   Q_OBJECT 
-  fftw_plan fft_plan;        /**< @brief Struktura biblioteki FFTW definiująca optymalny plan obliczeń. */
-  double *fft_in;            /**< @brief Bufor wejściowy dla algorytmu FFT. */
-  fftw_complex *fft_out;     /**< @brief Bufor wyjściowy dla algorytmu FFT. */
-  AudioStats stats;          /**< @brief Struktura przechowująca aktualne statystyki sygnału. */
-  double volume_gain = 1.0;  /**< @brief Mnożnik wzmocnienia głośności sygnału wejściowego. */
+  fftw_plan fft_plan;        /**< Struktura biblioteki FFTW definiująca optymalny plan obliczeń. */
+  double *fft_in;            /**< Bufor wejściowy dla algorytmu FFT. */
+  fftw_complex *fft_out;     /**< Bufor wyjściowy dla algorytmu FFT. */
+  AudioStats stats;          /**< Struktura przechowująca aktualne statystyki sygnału. */
+  double volume_gain = 1.0;  /**< Mnożnik wzmocnienia głośności sygnału wejściowego. */
 
   /**
    * @brief Oblicza wartość średnią (składową stałą) z podanej próbki sygnału.

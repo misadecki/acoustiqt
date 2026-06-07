@@ -1,8 +1,9 @@
 /**
  * @file mainwindow.hh
  * @author Michał Sadecki (michal.sadecki@proton.me)
- * @brief Plik ten zawiera funkcje związane z głównym oknem aplikacji. 
- * @version 0.3
+ * @brief Plik ten zawiera funkcje związane z głównym oknem aplikacji i
+ * zasadniczym jej działaniem. 
+ * @version 1.0
  * @date 2026-04-22
  *
  * @copyright Copyright (c) 2026 Michał Sadecki
@@ -53,10 +54,10 @@ class MainWindow : public QMainWindow {
   bool is_running = true;                         /**< Flaga określająca stan odbierania danych audio. */
   QTimer *timer;                                  /**< Wskaźnik na timer systemowy zarządzający odświeżaniem interfejsu użytkownika. */
   AudioStats latest_stats;                        /**< Struktura przechowująca najświeższe wyniki analizy sygnału. */
-  InfluxClient *db_client;
-  QTranslator app_translator;
-  const QString org = "KoNaR", application = "AcoustiQt";
-
+  InfluxClient *db_client;                        /**<Wskaźnik na klienta bazy danych InfluxDB. */
+  QTranslator app_translator;                     /**< Obiekt silnika tłumaczeń obsługujący podmianę języka aplikacji. */
+  const QString org = "KoNaR";                    /**< Nazwa organizacji wykorzystywana m.in. w QSettings */
+  const QString application = "AcoustiQt";        /**< Nazwa aplikacji wykorzystywana m.in. w QSettings. */
 
   /**
   * @brief Alokuje pamięć dla obiektów zawartych w klasie. 
@@ -88,23 +89,52 @@ class MainWindow : public QMainWindow {
    */
   void updateThemeFrameSize();
 
+  /**
+   * @brief Inicjalizuje dostępne języki i przygotowuje interfejs do ich obsługi.
+   */
   void initLanguages();
 
+  /**
+   * @brief Podłącza sygnały i sloty odpowiedzialne za zmianę i obsługę motywów graficznych.
+   */
   void connectThemes();
 
+  /**
+   * @brief Wczytuje i aplikuje ustawienia aplikacji zapisane podczas poprzedniej sesji.
+   */
   void setPreviousSettings();
 
+  /**
+   * @brief Odświeża teksty i tłumaczenia w interfejsie po załadowaniu nowego pliku językowego.
+   */
   void updateLanguages();
 
+  /**
+   * @brief Zeruje statystyki i czyści wykresy, przywracając interfejs do stanu "Brak połączenia".
+   */
   void setDisconnectedState();
 
+  /**
+   * @brief Dopasowuje rozmieszczenie i geometrię elementów interfejsu.
+   */
   void alignObjects();
 
+  /**
+   * @brief Inicjalizuje mechanizm Watchdoga monitorujący aktywność i ciągłość odbieranych danych.
+   */
   void connectWatchdog();
 
+  /**
+   * @brief Podłącza sygnały ze sterownia jednostkami osi (np. z ComboBoxa) do właściwych wizualizatorów.
+   */
   void connectAxisUnits();
 
-  void loadTheme(const QString &themePath);
+  /**
+   * @brief Ładuje i aplikuje globalny arkusz stylów/motyw do interfejsu aplikacji.
+   * @param[in] themePath -- nazwa pliku stylów .qss przechowujący
+   * charakterystykę danego motywu.
+   */
+  void loadTheme(const QString &themeName);
   Q_OBJECT
 private slots:
   /**
@@ -118,6 +148,10 @@ private slots:
    */
   void onVolumeSliderChanged(int value);
 
+  /**
+   * @brief Zmienia aktualny język interfejsu aplikacji na podstawie wyboru użytkownika.
+   * @param[in] index -- indeks wybranego języka z listy rozwijanej (np. QComboBox).
+   */
   void changeLanguage(int index);
 
   /**
@@ -154,7 +188,13 @@ public:
    */
   ~MainWindow() override;
 protected:
-
+  /**
+   * @brief Globalny filtr zdarzeń przechwytujący akcje z obserwowanych widżetów.
+   * @param[in] watched -- wskaźnik na widżet, do którego skierowane było zdarzenie.
+   * @param[in] event -- wskaźnik na obiekt przechwyconego zdarzenia.
+   * @return bool -- true, jeśli zdarzenie zostało obsłużone i ma zostać
+   * zablokowane dla innych, false w przeciwnym razie.
+   */
   bool eventFilter(QObject *watched, QEvent *event) override;
   /**
   * @brief Przelicza rozmiar okna w zależności od skali ustalonej przez

@@ -2,7 +2,7 @@
  * @file udp_receiver.hh
  * @author Michał Sadecki (michal.sadecki@proton.me)
  * @brief Implementacja komunikacji WiFi UDP po stronie aplikacji Qt.
- * @version 0.5
+ * @version 1.0
  * @date 2026-04-30
  *
  * @copyright Copyright (c) 2026 Michał Sadecki
@@ -24,9 +24,10 @@
  * wysyła sygnał o nowych danych do przetwarzania.
  */
 class UdpReceiver : public QObject {
-  QUdpSocket *udp_socket;  /**< @brief Gniazdo UDP wykorzystywane do komunikacji sieciowej. */
-  QTimer *watchdog;
-  bool isConnected = false;
+  QUdpSocket *udp_socket;     /**< Gniazdo UDP wykorzystywane do komunikacji sieciowej. */
+  QTimer *watchdog;           /**< Wskaźnik na timer pełniący rolę strażnika, monitorujący ciągłość odbieranych pakietów. */
+  bool isConnected = false;   /**< Flaga przechowująca obecny stan połączenia
+  sieciowego (true = obecne, false = brak). */
   Q_OBJECT 
 public:
   /**
@@ -37,6 +38,11 @@ public:
    */
   UdpReceiver(uint16_t port, QObject * parent = nullptr);
 
+  /**
+   * @brief Zwraca bieżący status połączenia z zewnętrznym źródłem danych (np. ESP32).
+   * @return bool -- true, jeśli połączenie jest aktywne i dane napływają na
+   * bieżąco, w przeciwnym razie false.
+   */
   bool isCurrentlyConnected() const {return isConnected; }
 signals:
   /**
@@ -46,7 +52,14 @@ signals:
   */
   void audioDataReceived(const QList<int32_t>& samples);
 
+  /**
+   * @brief Sygnał emitowany, gdy aplikacja odbierze pakiet z danymi po wcześniejszym stanie rozłączenia.
+   */
   void connectionRestored();
+
+  /**
+   * @brief Sygnał emitowany, gdy aplikacja przestanie otrzymywać pakiety i minie założony czas bezczynności.
+   */
   void connectionLost();
 
 private slots:
@@ -58,6 +71,13 @@ private slots:
   * sygnał o odebraniu danych.
   */
   void readPendingDatagrams();
+
+  /**
+   * @brief Slot wywoływany w momencie, gdy czasomierz watchdoga dojdzie do zera.
+   * 
+   * Uruchomienie tego slotu oznacza brak nowych danych UDP w wymaganym oknie czasowym,
+   * co skutkuje zmianą stanu `isConnected` i emisją sygnału @ref connectionLost().
+   */
   void onWatchdogTimeout();
 };
 

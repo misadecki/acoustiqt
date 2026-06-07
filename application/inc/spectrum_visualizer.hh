@@ -3,7 +3,7 @@
  * @author Michał Sadecki (michal.sadecki@proton.me)
  * @brief Implementacja głównej części aplikacji, gdzie rysowane są słupki widma
  * częstotliwościowego.
- * @version 0.2
+ * @version 1.0
  * @date 2026-05-03
  *
  * @copyright Copyright (c) 2026 Michał Sadecki
@@ -28,12 +28,26 @@ class SpectrumVisualizer : public BaseVisualizer {
   Q_OBJECT 
   AxisFormat current_format = AxisFormat::Auto;
   QList<double> spectrum_data;  /**< Lokalny bufor na ostatnio odebrane dane widma. */
-  QString xAxisTitle;
+  QString xAxisTitle;           /**< Opis osi X przechowujący wielkość
+                                      naniesioną wraz z jednostką. */
 
+  /**
+   * @brief Ustawia tytuł osi X w zależności od wybranej jednostki z @ref
+   * AxisFormat.
+   */
   void setxAxisTitle();
 public:
+
+  /**
+   * @brief Ustawia format wyświetlania jednostek dla osi częstotliwości.
+   * @param[in] format -- wybrany format osi (np. Hz lub kHz) zdefiniowany w
+   * typie wyliczeniowym @ref AxisFormat.
+   */
   void setFrequencyFormat(AxisFormat format);
 
+  /**
+   * @brief Czyści widżet, gdy zerwano połączenie i dane nie są odbierane.
+   */
   void clearData();
 
   /**

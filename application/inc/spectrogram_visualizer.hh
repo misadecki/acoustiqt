@@ -1,8 +1,8 @@
 /**
  * @file spectrogram_visualizer.hh
  * @author Michał Sadecki (michal.sadecki@proton.me)
- * @brief Implementacja rysowania spektrogramu w drugim oknie aplikacji.
- * @version 0.2
+ * @brief Implementacja rysowania spektrogramu w drugim widoku aplikacji.
+ * @version 1.0
  * @date 2026-05-06
  *
  * @copyright Copyright (c) 2026 Michał Sadecki
@@ -27,13 +27,14 @@
   */
 class SpectrogramVisualizer : public BaseVisualizer {
   Q_OBJECT
+  QImage image;  /**< Obraz przechowujący bufor graficzny (Off-screen rendering). */
+
   /**
   * @brief Konwertuje amplitudę na kolor RGB. 
   *
   * @param[in] magnitude -- wartość amplitudy [dB]
   */
   QRgb magnitudeToColor(double magnitude);
-  QImage image;  /**< Obraz przechowujący bufor graficzny (Off-screen rendering). */
 protected:
   /**
   * @brief Obsługuje cykl rysownaia widżetu spektrogramu.
@@ -57,6 +58,9 @@ public:
   explicit SpectrogramVisualizer(QWidget *parent = nullptr) :
     BaseVisualizer(parent) {}
 
+  /**
+   * @brief Czyści widżet, gdy zerwano połączenie i dane nie są odbierane.
+   */
   void clearData();
 };
 
