@@ -4,7 +4,7 @@
 
 ## Automatyka i Robotyka 2023
 
-AcoustiQt to nowoczesna, wielowątkowa aplikacja desktopowa napisana w C++ z
+AcoustiQt to nowoczesna aplikacja desktopowa napisana w C++ z
 wykorzystaniem frameworka Qt. Służy do analizy, przetwarzania i wizualizacji na
 żywo sygnałów audio przesyłanych bezprzewodowo przez UDP z mikrokontrolerów (np.
 ESP32). Projekt stworzony na potrzeby kursu o Wizualizacja danych sensorycznych.
