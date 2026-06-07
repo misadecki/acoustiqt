@@ -71,6 +71,7 @@ QPushButton:pressed {
 }
 
 QPushButton#btn_dark {
+    background-color: #262525;
     color: #FFFFFF;
 }
 
