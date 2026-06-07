@@ -12,7 +12,7 @@
 #ifndef SPECTROGRAM_SCALE_WIDGET_HH
 #define SPECTROGRAM_SCALE_WIDGET_HH
 
-#include <QWidget>
+#include "base_visualizer.hh"
 #include <QPainter>
 
 /**
@@ -21,7 +21,7 @@
  * etykiet tekstowych reprezentujących wartości w [dBFS]. Działa jako osobny, niezależny 
  * komponent interfejsu, który automatycznie dopasowuje się do wysokości głównego wykresu.
  */
-class SpectrogramScaleWidget : public QWidget {
+class SpectrogramScaleWidget : public BaseVisualizer {
   Q_OBJECT 
 protected:
   /**
@@ -37,7 +37,8 @@ public:
    * @brief Konstruktor klasy SpectrogramScaleWidget.
    * * @param[in] parent -- wskaźnik na widżet nadrzędny, domyślnie nullptr.
    */
-  explicit SpectrogramScaleWidget(QWidget *parent = nullptr);
+  explicit SpectrogramScaleWidget(QWidget *parent = nullptr) :
+    BaseVisualizer(parent) {}
 };
 
 #endif // SPECTROGRAM_SCALE_WIDGET_HH

@@ -4,7 +4,7 @@
 #include "audio_config.hh"
 #include "axis_painter.hh"
 
-SpectrumVisualizer::SpectrumVisualizer(QWidget *parent) : QWidget(parent) {
+SpectrumVisualizer::SpectrumVisualizer(QWidget *parent) : BaseVisualizer(parent) {
   setAttribute(Qt::WA_StyledBackground, true);
 }
 
@@ -27,7 +27,7 @@ void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
   clipPath.addRoundedRect(rect(), 5.0, 5.0);
   painter.setClipPath(clipPath);
 
-  painter.fillRect(rect(), qRgb(200, 200, 200));
+  painter.fillRect(rect(), colors.background);
 
   double width = this->width();
   double height = this->height();
@@ -61,19 +61,19 @@ void SpectrumVisualizer::paintEvent(QPaintEvent *event) {
     double draw_w = std::max(1.0, bar_width - 1.0);
 
     QLinearGradient gradient(x, y, x, y + bar_height);
-    gradient.setColorAt(0.0, QColor(255, 255, 0));
-    gradient.setColorAt(0.5, QColor(170, 85, 255));
-    gradient.setColorAt(1.0, QColor(85, 0, 127));
+    gradient.setColorAt(0.0, colors.grad1); 
+    gradient.setColorAt(0.5, colors.grad2);
+    gradient.setColorAt(1.0, colors.grad2);
     painter.fillRect(QRectF(x, y, draw_w, bar_height), gradient);
   }
 
   setxAxisTitle();
   AxisPainter::drawXAxis(painter, width, height, margins, xAxisTitle, 0.0,
                          AudioConfig::SAMPLE_RATE / 2.0, 5, current_format,
-                         axisColor);
+                         colors.axis);
   AxisPainter::drawYAxis(painter, height, margins, tr("Amplitude spectrum [dBFS]"), 
                          -AudioConfig::NOISE_THRESHOLD, 0.0, 4, current_format,
-                         axisColor);
+                         colors.axis);
 }
 
 void SpectrumVisualizer::setxAxisTitle() {
@@ -93,19 +93,5 @@ void SpectrumVisualizer::setxAxisTitle() {
 
 void SpectrumVisualizer::setFrequencyFormat(AxisFormat format) {
   current_format = format;
-  update();
-}
-
-void SpectrumVisualizer::applyThemeColors(const QString &themeName) {
-  if (themeName == "light") {
-    bgColor = QColor("#EDEDED");
-    axisColor = QColor("#321052");
-  } else if (themeName == "dark") {
-    bgColor = QColor("#11111B");
-    axisColor = QColor("#FFFFFF");
-  } else if (themeName == "intense") {
-    bgColor = QColor("#831DA3");
-    axisColor = QColor("#FFFFFF");
-  }
   update();
 }

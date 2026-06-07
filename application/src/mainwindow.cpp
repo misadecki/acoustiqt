@@ -242,6 +242,8 @@ void MainWindow::loadTheme(const QString &themeName) {
   settings.setValue("SavedTheme", themeName);
 
   ui->spectrum_widget->applyThemeColors(themeName);
+  ui->spectrogram_widget->applyThemeColors(themeName);
+  ui->spectrogram_legend->applyThemeColors(themeName);
 }
 
 void MainWindow::changeLanguage(int index) {

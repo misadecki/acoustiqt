@@ -14,7 +14,7 @@
 
 #include <QObject>
 #include <QList>
-#include <QWidget>
+#include "base_visualizer.hh"
 #include "axis_painter.hh"
 
 /**
@@ -24,18 +24,15 @@
   * Klasa implementuje aktualizację widma na podstawie nowych próbek i
   * wyrysowanie graficznej reprezentacji tych danych w aplikacji.
   */
-class SpectrumVisualizer : public QWidget {
+class SpectrumVisualizer : public BaseVisualizer {
   Q_OBJECT 
   AxisFormat current_format = AxisFormat::Auto;
   QList<double> spectrum_data;  /**< Lokalny bufor na ostatnio odebrane dane widma. */
   QString xAxisTitle;
-  QColor bgColor = QColor(Qt::lightGray);
-  QColor axisColor = QColor(Qt::black);
 
   void setxAxisTitle();
 public:
   void setFrequencyFormat(AxisFormat format);
-  void applyThemeColors(const QString &themeName);
 
   /**
   * @brief Inicjalizuje wizualizator widma. 

@@ -1,8 +1,6 @@
 #include "spectrogram_scale_widget.hh"
 #include "audio_config.hh"
 
-SpectrogramScaleWidget::SpectrogramScaleWidget(QWidget *parent) : QWidget(parent) {}
-
 void SpectrogramScaleWidget::paintEvent(QPaintEvent* event) {
   Q_UNUSED(event);
 
@@ -24,15 +22,12 @@ void SpectrogramScaleWidget::paintEvent(QPaintEvent* event) {
   int barWidth = qBound(10, static_cast<int>(0.4 * w), 40);
   QLinearGradient gradient(0, y_bot, 0, y_top);
 
-  // gradient.setColorAt(0.0, Qt::black);
-  // gradient.setColorAt(0.5, Qt::darkMagenta);
-  // gradient.setColorAt(1.0, Qt::yellow);
-
-  gradient.setColorAt(0.0, Qt::black);
-  gradient.setColorAt(1.0, QColor(0, 255, 150));
+  gradient.setColorAt(1.0, colors.grad1);
+  gradient.setColorAt(0.5, colors.grad2);
+  gradient.setColorAt(0.0, colors.grad3);
 
   painter.fillRect(0, y_top, barWidth, draw_h, gradient);
-  painter.setPen(Qt::lightGray);
+  painter.setPen(colors.axis);
   painter.setFont(QFont("Sans Serif", 8));
 
   for (int i = 0; i <= numTicks; ++i) {

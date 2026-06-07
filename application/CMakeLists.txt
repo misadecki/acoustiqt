@@ -51,6 +51,8 @@ qt_add_executable(application
     inc/fft_processor.hh
     inc/spectrogram_scale_widget.hh
     inc/influx_client.hh
+    inc/theme_palette.hh
+    inc/base_visualizer.hh
 
     ../shared/protocol.hh
     ../shared/protocol.cpp

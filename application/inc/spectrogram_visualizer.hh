@@ -12,7 +12,7 @@
 #define SPECTROGRAM_VISUALIZER_H__
 
 #include <QImage>
-#include <QWidget>
+#include "base_visualizer.hh"
 #include <QList>
 #include <QRgb>
 
@@ -25,7 +25,7 @@
   * wyrysowywany poprzez przesuwanie obrazu o jeden piksel w lewo, a następnie
   * dodanie nowego paska z amplitudami widma. 
   */
-class SpectrogramVisualizer : public QWidget {
+class SpectrogramVisualizer : public BaseVisualizer {
   Q_OBJECT
   /**
   * @brief Konwertuje amplitudę na kolor RGB. 
@@ -54,7 +54,8 @@ public:
   *
   * @param[in] parent -- wskaźnik na rodzica tego widżetu.
   */
-  explicit SpectrogramVisualizer(QWidget *parent = nullptr);
+  explicit SpectrogramVisualizer(QWidget *parent = nullptr) :
+    BaseVisualizer(parent) {}
 };
 
 #endif 

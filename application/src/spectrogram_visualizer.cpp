@@ -5,8 +5,6 @@
 #include "audio_config.hh"
 #include "axis_painter.hh"
 
-SpectrogramVisualizer::SpectrogramVisualizer(QWidget *parent) : QWidget(parent) {}
-
 void SpectrogramVisualizer::addFFTLine(const QList<double> &latest_fft) {
   if (latest_fft.isEmpty()) return;
   int bins = latest_fft.size();
@@ -20,7 +18,7 @@ void SpectrogramVisualizer::addFFTLine(const QList<double> &latest_fft) {
 
   if (image.isNull() || image.height() != bins) {
     image = QImage(curr_width, bins, QImage::Format_RGB32);
-    image.fill(Qt::black);
+    image.fill(colors.background);
   }
 
   uint16_t w = image.width();
@@ -33,8 +31,13 @@ void SpectrogramVisualizer::addFFTLine(const QList<double> &latest_fft) {
   painter.end();
 
   for (int y = 0; y < latest_fft.size(); ++y) {
-    image.setPixel(w - 1, h - 1 - y,
-                   magnitudeToColor(latest_fft[y]));
+    double magnitude = latest_fft[y];
+
+    if (y == 0 && latest_fft.size() > 1) {
+      magnitude = latest_fft[1];
+    }
+
+    image.setPixel(w - 1, h - 1 - y, magnitudeToColor(magnitude));
   }
   update();
 }
@@ -74,7 +77,7 @@ void SpectrogramVisualizer::paintEvent(QPaintEvent *event) {
   if (!painter.isActive()) return;
 
   QMarginsF margins(60.0, 15.0, 20.0, 50.0);
-  painter.fillRect(rect(), Qt::black);
+  painter.fillRect(rect(), colors.background);
   
   double w = this->width();
   double h = this->height();
@@ -88,7 +91,8 @@ void SpectrogramVisualizer::paintEvent(QPaintEvent *event) {
     painter.drawImage(targetRect, image);
   }
 
-  AxisPainter::drawXAxis(painter, w, h, margins, tr("Time [s]"), -10.0, 0.0, 5);
+  AxisPainter::drawXAxis(painter, w, h, margins, tr("Time [s]"), -10.0, 0.0, 5,
+                         AxisFormat::Auto, colors.axis);
   AxisPainter::drawYAxis(painter, h, margins, tr("Frequency [Hz]"), 0.0,
-                         AudioConfig::SAMPLE_RATE / 2.0, 4);
+                         AudioConfig::SAMPLE_RATE / 2.0, 4, AxisFormat::Auto, colors.axis);
 }
