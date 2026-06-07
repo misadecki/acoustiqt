@@ -49,13 +49,15 @@ Instrukcja dotyczy kompilacji oprogramowania ze źródeł oraz instalacji w prze
 Przed rozpoczęciem upewnij się, że masz zainstalowany kompilator C++, narzędzie CMake oraz biblioteki deweloperskie Qt 6 (w tym moduł SVG).
 
 *   **Arch Linux:**
+
 ```bash
     sudo pacman -S base-devel cmake qt6-base qt6-svg
-    ```
+```
 *   **Ubuntu / Debian:**
+
 ```bash
     sudo apt install build-essential cmake qt6-base-dev qt6-svg-dev
-    ```
+```
 
 ## ⚙️ Konfiguracja przed uruchomieniem
 
