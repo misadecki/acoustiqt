@@ -16,6 +16,15 @@ UdpReceiver::UdpReceiver(uint16_t port, QObject * parent) : QObject(parent) {
   connect(udp_socket, &QUdpSocket::readyRead, this,
           &UdpReceiver::readPendingDatagrams);
 
+  discoveryTimer.setInterval(2000);
+  connect(&discoveryTimer, &QTimer::timeout, this, [this]() {
+    QByteArray discoveryPacket = "AcoustiQt_Server_Here";
+    broadcastSocket.writeDatagram(discoveryPacket, QHostAddress::Broadcast,
+                                  Protocol::DISCOVERY_PORT);
+  });
+
+  discoveryTimer.start();
+
   watchdog = new QTimer(this);
   watchdog->setInterval(1500);
   connect(watchdog, &QTimer::timeout, this, &UdpReceiver::onWatchdogTimeout);

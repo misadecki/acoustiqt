@@ -50,6 +50,7 @@ void WiFi_UDP::handle_connected() {
 
   connected = true;
   udp.begin(Protocol::PORT);
+  discovery_udp.begin(Protocol::DISCOVERY_PORT);
 }
 
 void WiFi_UDP::handle_disconnected() {
@@ -61,6 +62,8 @@ void WiFi_UDP::handle_disconnected() {
 void WiFi_UDP::send_audio_data(const int32_t *raw_samples) {
   if (!connected || raw_samples == nullptr) return;
 
+  if (!find_target()) return;
+
   AudioFrame frame;
   frame.start = Protocol::START_BYTES;
   frame.count = packet_count++;
@@ -71,12 +74,34 @@ void WiFi_UDP::send_audio_data(const int32_t *raw_samples) {
                                        sizeof(AudioFrame) - 1,
                                        Protocol::POLYNOMIAL, Protocol::INIT_VAL);
 
-  int begin_res = udp.beginPacket(UDP_ADDR, Protocol::PORT);
+  int begin_res = udp.beginPacket(target_ip, Protocol::PORT);
   if (begin_res == 0) {
     Serial.println("beginPacket error");
     return;
   }
   udp.write(reinterpret_cast<const uint8_t*>(&frame), sizeof(AudioFrame));
   udp.endPacket();
-  Serial.println("Koniec send_audio_data");
+}
+
+bool WiFi_UDP::find_target() {
+  if (!target_found) {
+    int packet_size = discovery_udp.parsePacket();
+    if (packet_size) {
+      char buf[32];
+      int len = discovery_udp.read(buf, sizeof(buf) - 1);
+      if (len > 0) {
+        buf[len] = '\0';
+
+        if (String(buf) == "AcoustiQt_Server_Here") {
+          target_ip = discovery_udp.remoteIP();
+          target_found = true;
+          Serial.print("Qt app found: ");
+          Serial.println(target_ip);
+        }
+      }
+    }
+    return false;
+  }
+
+  return true;
 }

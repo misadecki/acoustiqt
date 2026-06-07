@@ -13,7 +13,7 @@ class Microphone {
   inline void togglePin(int pin) const { digitalWrite(pin, !digitalRead(pin)); }
 public:
   Microphone(int32_t pin_sck, int32_t pin_ws, int32_t pin_sd);
-  inline const int32_t* get_buffer() const { Serial.println("Wywołano get_buffer"); return buffer; }
+  inline const int32_t* get_buffer() const { return buffer; }
   inline size_t get_buffer_sample_count() const { return last_sample; }
   int32_t read_raw_data_to_buffer();
 };

@@ -28,13 +28,19 @@ class UdpReceiver : public QObject {
   QTimer *watchdog;           /**< Wskaźnik na timer pełniący rolę strażnika, monitorujący ciągłość odbieranych pakietów. */
   bool isConnected = false;   /**< Flaga przechowująca obecny stan połączenia
   sieciowego (true = obecne, false = brak). */
+  QUdpSocket broadcastSocket; /**< Gniazdo używane do wysyłania pakietów rozgłoszeniowych
+   * w celu wykrycia urządzenia przez mikrokontroler. */
+  QTimer discoveryTimer;      /**< Czasomierz cyklicznie wyzwalający wysyłanie pakietów rozgłoszeniowych. */
   Q_OBJECT 
 public:
   /**
-   * @brief Konstruktor, który inicjalizuje gniazdo na porcie, wiąże je i przygotowuje pod odbiór danych.
+   * @brief Konstruktor inicjalizujący komunikację UDP.
+   * 
+   * Ustawia gniazdo odbiorcze na zadanym porcie, inicjalizuje timer rozgłaszający 
+   * adres IP aplikacji w sieci lokalnej oraz uruchamia mechanizm watchdog.
    *
-   * @param[in] port -- port, na którym odbywa się komunikacja
-   * @param[in] parent -- wskaźnik na rodzica obiektu
+   * @param[in] port -- port, na którym aplikacja nasłuchuje pakietów audio.
+   * @param[in] parent -- wskaźnik na rodzica obiektu.
    */
   UdpReceiver(uint16_t port, QObject * parent = nullptr);
 

@@ -25,27 +25,32 @@ namespace Protocol {
   /**
    * @brief Numer portu UDP wykorzystywanego do transmisji danych.
    */
-  static constexpr uint16_t PORT = 42069;
+  inline static constexpr uint16_t PORT = 42069;
+
+  /**
+   * @brief Numer portu UDP wykorzystywy do rozgłoszenia.
+   */
+  inline static constexpr uint16_t DISCOVERY_PORT = 5555;
 
   /**
    * @brief Bajty startowe identyfikujące początek ramki: 0xDEAD.
    */
-  static constexpr uint16_t START_BYTES = 0xDEAD;
+  inline static constexpr uint16_t START_BYTES = 0xDEAD;
 
   /**
    * @brief Liczba próbek audio typu int32_t przesyłanych w pojedynczej ramce.
    */
-  static constexpr uint16_t SAMPLES_PER_PACKET = 256;
+  inline static constexpr uint16_t SAMPLES_PER_PACKET = 256;
 
   /**
    * @brief Wielomian używany do obliczeń sumy kontrolnej CRC8.
    */
-  static constexpr uint8_t POLYNOMIAL = 0x07;
+  inline static constexpr uint8_t POLYNOMIAL = 0x07;
 
   /**
    * @brief Wartość początkowa rejestru CRC.
    */
-  static constexpr uint8_t INIT_VAL = 0x00;
+  inline static constexpr uint8_t INIT_VAL = 0x00;
 
   /**
     * @brief Oblicza 8-bitową sumę kontrolną (CRC8) dla podanego bufora.
