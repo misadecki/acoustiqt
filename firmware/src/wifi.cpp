@@ -18,7 +18,7 @@ void WiFi_UDP::connect_to_wifi(const char *ssid, const char *pwd) {
   uint8_t attempts = 0, max_attempts = 30;
 
   while ((WiFi.status() != WL_CONNECTED) && (attempts < max_attempts)) {
-    rgbLedWriteOrdered(LED, LED_COLOR_ORDER_RGB, 0, 0, 255);
+    rgbLedWriteOrdered(LED, LED_COLOR_ORDER_RGB, 0, 0, 40);
     delay(250);
     rgbLedWriteOrdered(LED, LED_COLOR_ORDER_RGB, 0, 0, 0);
     delay(250);
@@ -28,13 +28,13 @@ void WiFi_UDP::connect_to_wifi(const char *ssid, const char *pwd) {
 
   if (WiFi.status() != WL_CONNECTED) {
     while (true) {
-      rgbLedWriteOrdered(LED, LED_COLOR_ORDER_RGB, 0, 0, 255);
+      rgbLedWriteOrdered(LED, LED_COLOR_ORDER_RGB, 0, 0, 40);
       delay(1000);
       rgbLedWriteOrdered(LED, LED_COLOR_ORDER_RGB, 0, 0, 0);
       delay(2000);
     }
   }
-  rgbLedWriteOrdered(LED, LED_COLOR_ORDER_RGB, 0, 50, 0);
+  rgbLedWriteOrdered(LED, LED_COLOR_ORDER_RGB, 0, 10, 0);
 
   return;
 }
