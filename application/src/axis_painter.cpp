@@ -20,7 +20,9 @@ void AxisPainter::drawXAxis(QPainter &painter, double width, double height,
     painter.drawLine(x_pos, margins.top() + draw_h, x_pos, margins.top() + draw_h + 5);
 
     QString label;
-    if (format == AxisFormat::kHz)
+    if (format == AxisFormat::Time) {
+      label = QString::number(x, 'f', 1);
+    } else if (format == AxisFormat::kHz)
       label = QString::number(x / 1000.0, 'f', 1) + "k";
     else if (format == AxisFormat::Hz)
       label = QString::number(static_cast<int>(x));

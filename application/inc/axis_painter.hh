@@ -26,7 +26,8 @@
 enum class AxisFormat {
   Auto,    /**< Automatyczne dobieranie jednostki w zależności od zakresu. */
   Hz,      /**< Wymuszenie wyświetlania w hercach [Hz]. */
-  kHz      /**< Wymuszenie wyświetlania w kilohercach [kHz]. */
+  kHz,     /**< Wymuszenie wyświetlania w kilohercach [kHz]. */
+  Time     /**< Formatowanie wartości jako czas (w sekundach). */
 };
 
 /**

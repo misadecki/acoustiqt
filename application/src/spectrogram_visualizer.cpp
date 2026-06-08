@@ -9,16 +9,20 @@ void SpectrogramVisualizer::addFFTLine(const QList<double> &latest_fft) {
   if (latest_fft.isEmpty()) return;
   int bins = latest_fft.size();
 
-  int curr_width;
+  QMarginsF margins(60.0, 15.0, 20.0, 50.0);
+  int desiredWidth = this->width() - margins.left() - margins.right();
+  if (desiredWidth <= 0) desiredWidth = 800;
 
-  if (this->width() > 0)
-    curr_width = this->width();
-  else 
-    curr_width = 800;
+  if (image.isNull() || image.height() != bins || image.width() != desiredWidth) {
+    QImage newImage(desiredWidth, bins, QImage::Format_RGB32);
+    newImage.fill(colors.background);
 
-  if (image.isNull() || image.height() != bins) {
-    image = QImage(curr_width, bins, QImage::Format_RGB32);
-    image.fill(colors.background);
+    if (!image.isNull()) {
+      QPainter p(&newImage);
+      int dx = desiredWidth - image.width();
+      p.drawImage(dx, 0, image);
+    }
+    image = newImage;
   }
 
   uint16_t w = image.width();
@@ -56,20 +60,20 @@ QRgb SpectrogramVisualizer::magnitudeToColor(double magnitude) {
 
   if (normalized < 0.5) {
     double t = normalized * 2.0; 
-    r = static_cast<int>(colors.grad3.red() + t * colors.grad2.red() -
-                         colors.grad3.red());
-    g = static_cast<int>(colors.grad3.green() + t * colors.grad2.green() -
-                         colors.grad3.green());
-    b = static_cast<int>(colors.grad3.blue() + t * colors.grad2.blue() -
-                         colors.grad3.blue());
+    r = static_cast<int>(colors.grad3.red() + t * (colors.grad2.red() -
+                         colors.grad3.red()));
+    g = static_cast<int>(colors.grad3.green() + t * (colors.grad2.green() -
+                         colors.grad3.green()));
+    b = static_cast<int>(colors.grad3.blue() + t * (colors.grad2.blue() -
+                         colors.grad3.blue()));
   } else {
     double t = (normalized - 0.5) * 2.0;
-    r = static_cast<int>(colors.grad2.red() + t * colors.grad1.red() -
-                         colors.grad2.red());
-    g = static_cast<int>(colors.grad2.green() + t * colors.grad1.green() -
-                         colors.grad2.green());
-    b = static_cast<int>(colors.grad2.blue() + t * colors.grad1.blue() -
-                         colors.grad2.blue());
+    r = static_cast<int>(colors.grad2.red() + t * (colors.grad1.red() -
+                         colors.grad2.red()));
+    g = static_cast<int>(colors.grad2.green() + t * (colors.grad1.green() -
+                         colors.grad2.green()));
+    b = static_cast<int>(colors.grad2.blue() + t * (colors.grad1.blue() -
+                         colors.grad2.blue()));
   }
 
   return qRgb(qBound(0, r, 255), qBound(0, g, 255), qBound(0, b, 255));
@@ -99,8 +103,13 @@ void SpectrogramVisualizer::paintEvent(QPaintEvent *event) {
     painter.drawImage(targetRect, image);
   }
 
-  AxisPainter::drawXAxis(painter, w, h, margins, tr("Time [s]"), -10.0, 0.0, 5,
-                         AxisFormat::Auto, colors.axis);
+  double timePerFrame = static_cast<double>(Protocol::SAMPLES_PER_PACKET) /
+    AudioConfig::SAMPLE_RATE;
+
+  double totalTime = timePerFrame * image.width();
+
+  AxisPainter::drawXAxis(painter, w, h, margins, tr("Time [s]"), -totalTime, 0.0, 5,
+                         AxisFormat::Time, colors.axis);
   AxisPainter::drawYAxis(painter, h, margins, tr("Frequency [Hz]"), 0.0,
                          AudioConfig::SAMPLE_RATE / 2.0, 4, AxisFormat::Auto, colors.axis);
 }
